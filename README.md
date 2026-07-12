@@ -1,6 +1,6 @@
-# Aureo (TicketNest)
+# Aureo (golden hour)
 
-Aureo is a photography booking web app — *Photography, beautifully booked.* This repository (`ticket-nest`) contains the Angular frontend.
+Aureo is a photography booking web app — _Photography, beautifully booked._ This repository (`aureo`) contains the Angular frontend.
 
 ## Tech stack
 
@@ -25,15 +25,15 @@ public/                # Static assets (logos, favicon)
 
 ## Routes
 
-| Path            | Component  | Status        |
-| --------------- | ---------- | ------------- |
-| `/`             | Services   | Implemented   |
-| `/my-bookings`  | —          | Planned       |
-| `/my-profile`   | —          | Planned       |
-| `/privacy`      | —          | Planned       |
-| `/terms`        | —          | Planned       |
-| `/contact`      | —          | Planned       |
-| `/**`           | Not Found  | Implemented   |
+| Path           | Component | Status      |
+| -------------- | --------- | ----------- |
+| `/`            | Services  | Implemented |
+| `/my-bookings` | —         | Planned     |
+| `/my-profile`  | —         | Planned     |
+| `/privacy`     | —         | Planned     |
+| `/terms`       | —         | Planned     |
+| `/contact`     | —         | Planned     |
+| `/**`          | Not Found | Implemented |
 
 ## Getting started
 

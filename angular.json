@@ -6,7 +6,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "ticketNest": {
+    "aureo": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -54,10 +54,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "ticketNest:build:production"
+              "buildTarget": "aureo:build:production"
             },
             "development": {
-              "buildTarget": "ticketNest:build:development"
+              "buildTarget": "aureo:build:development"
             }
           },
           "defaultConfiguration": "development"
