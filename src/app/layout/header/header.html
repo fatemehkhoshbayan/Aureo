@@ -1,0 +1,32 @@
+<header class="flex w-full top-0 z-50 bg-card/80 backdrop-blur-md border-b border-border py-2">
+  <div class="flex w-full max-w-7xl mx-auto items-center justify-between">
+    <a
+      routerLink="/"
+      routerLinkActive="border-primary"
+      [routerLinkActiveOptions]="{ exact: true }"
+      class="flex items-center gap-2.5 transition-colors"
+    >
+      <img src="aureo_logo_concept.png" alt="Aureo" width="250" height="300" />
+    </a>
+
+    <nav class="flex items-center gap-1">
+      @for (link of NAV_LINKS; track link.id) {
+        <a
+          [routerLink]="link.href"
+          routerLinkActive="text-white bg-primary"
+          class="flex items-center px-4 py-2 text-primary hover:text-foreground hover:bg-muted rounded-xl text-md font-bold transition-all gap-2"
+          [routerLinkActiveOptions]="link.href === '/' ? { exact: true } : { exact: false }"
+        >
+          <span [class]="link.icon + ' text-xl'"></span>
+          {{ link.label }}</a
+        >
+      }
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <button
+        class="w-9 h-9 rounded-xl flex items-center justify-center border border-border hover:border-primary/40 text-muted-foreground hover:text-foreground transition-all"
+      ></button>
+    </div>
+  </div>
+</header>

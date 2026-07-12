@@ -1,59 +1,90 @@
-# TicketNest
+# Aureo (TicketNest)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.0.6.
+Aureo is a photography booking web app — *Photography, beautifully booked.* This repository (`ticket-nest`) contains the Angular frontend.
 
-## Development server
+## Tech stack
 
-To start a local development server, run:
+- **Angular 22** — standalone components, signals, and the application builder
+- **Tailwind CSS 4** — custom design tokens and dark mode
+- **Iconify** — Lucide icons via `@iconify/tailwind4`
+- **Vitest** — unit tests via `@angular/build:unit-test`
+- **TypeScript 6** with path aliases (`@/*`, `@layout/*`, `@features/*`, `@shared/*`)
 
-```bash
-ng serve
+## Project structure
+
+```
+src/app/
+├── features/          # Route-level pages (services, not-found, …)
+├── layout/            # Shell components (header, footer, main-layout)
+│   ├── header/
+│   └── footer/
+├── app.routes.ts      # Application routing
+└── app.ts             # Root component
+public/                # Static assets (logos, favicon)
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Routes
 
-## Code scaffolding
+| Path            | Component  | Status        |
+| --------------- | ---------- | ------------- |
+| `/`             | Services   | Implemented   |
+| `/my-bookings`  | —          | Planned       |
+| `/my-profile`   | —          | Planned       |
+| `/privacy`      | —          | Planned       |
+| `/terms`        | —          | Planned       |
+| `/contact`      | —          | Planned       |
+| `/**`           | Not Found  | Implemented   |
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Getting started
+
+### Prerequisites
+
+- Node.js (LTS recommended)
+- npm 11+
+
+### Install dependencies
+
+```bash
+npm install
+```
+
+### Development server
+
+```bash
+npm start
+```
+
+Open [http://localhost:4200](http://localhost:4200). The app reloads automatically when source files change.
+
+### Build
+
+```bash
+npm run build
+```
+
+Production output is written to `dist/`.
+
+### Unit tests
+
+```bash
+npm test
+```
+
+### Code scaffolding
+
+Generate new components, directives, pipes, and more with the Angular CLI:
 
 ```bash
 ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
 ng generate --help
 ```
 
-## Building
+## Styling
 
-To build the project run:
+Global styles and design tokens live in `src/styles.css`. The theme uses CSS custom properties for colors, typography (Outfit & DM Sans), and spacing. Dark mode is available via the `.dark` class.
 
-```bash
-ng build
-```
+## Additional resources
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- [Angular documentation](https://angular.dev)
+- [Angular CLI reference](https://angular.dev/tools/cli)
+- [Tailwind CSS documentation](https://tailwindcss.com/docs)
