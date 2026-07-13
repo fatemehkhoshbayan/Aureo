@@ -1,4 +1,4 @@
-<div class="relative h-[700px] overflow-hidden bg-muted">
+<div class="relative h-[800px] overflow-hidden bg-muted">
   @for (slide of CAROUSEL_SLIDES; track slide.id; let i = $index) {
     <div
       class="absolute inset-0 transition-opacity duration-1000"
@@ -21,9 +21,7 @@
       <p class="icon-[lucide--camera] text-lg"></p>
       {{ CAROUSEL_SLIDES[currentSlide()].label }} Photography
     </div>
-    <h1
-      class="text-4xl sm:text-6xl font-black text-white mb-4 leading-tight font-['Outfit', sans-serif]"
-    >
+    <h1 class="text-4xl sm:text-6xl font-black text-white mb-4 leading-tight">
       Book your<br />
       <span class="text-secondary">perfect moment.</span>
     </h1>
@@ -50,8 +48,7 @@
         type="button"
         (click)="setSlide(i)"
         class="h-1.5 rounded-full transition-all duration-300"
-        [style.width.px]="i === currentSlide() ? 28 : 8"
-        [style.background]="i === currentSlide() ? 'var(--secondary)' : 'var(--muted)'"
+        [class]="i === currentSlide() ? 'bg-secondary w-6' : 'bg-muted/50 w-1.5'"
       ></button>
     }
   </div>
