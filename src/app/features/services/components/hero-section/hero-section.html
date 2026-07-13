@@ -1,0 +1,58 @@
+<div class="relative h-[700px] overflow-hidden bg-muted">
+  @for (slide of CAROUSEL_SLIDES; track slide.id; let i = $index) {
+    <div
+      class="absolute inset-0 transition-opacity duration-1000"
+      [class.opacity-0]="i !== currentSlide()"
+      [class.opacity-100]="i === currentSlide()"
+    >
+      <img
+        [src]="'https://images.unsplash.com/' + slide.image + '?w=1400&h=700&fit=crop&auto=format'"
+        [alt]="slide.label"
+        class="w-full h-full object-cover"
+      />
+    </div>
+  }
+
+  <div class="absolute inset-0 bg-linear-to-b from-black/30 via-black/40 to-black/70"></div>
+  <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
+    <div
+      class="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4 text-sm font-semibold text-white bg-secondary/30 border border-secondary/50"
+    >
+      <p class="icon-[lucide--camera] text-lg"></p>
+      {{ CAROUSEL_SLIDES[currentSlide()].label }} Photography
+    </div>
+    <h1
+      class="text-4xl sm:text-6xl font-black text-white mb-4 leading-tight font-['Outfit', sans-serif]"
+    >
+      Book your<br />
+      <span class="text-secondary">perfect moment.</span>
+    </h1>
+    <p class="text-white/80 text-lg mb-8 max-w-md">
+      Find and book talented photographers for every occasion.
+    </p>
+    <div class="relative w-full max-w-xl">
+      <span
+        class="icon-[lucide--search] absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"
+      ></span>
+      <input
+        type="text"
+        placeholder="Search by photographer name or specialty…"
+        [value]="search"
+        (input)="search = $any($event.target).value"
+        class="w-full pl-11 pr-4 py-4 rounded-2xl border-0 bg-white/95 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-white/60 shadow-2xl text-sm"
+      />
+    </div>
+  </div>
+
+  <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
+    @for (slide of CAROUSEL_SLIDES; track slide.id; let i = $index) {
+      <button
+        type="button"
+        (click)="setSlide(i)"
+        class="h-1.5 rounded-full transition-all duration-300"
+        [style.width.px]="i === currentSlide() ? 28 : 8"
+        [style.background]="i === currentSlide() ? 'var(--secondary)' : 'var(--muted)'"
+      ></button>
+    }
+  </div>
+</div>
