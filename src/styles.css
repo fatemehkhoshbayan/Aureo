@@ -55,7 +55,7 @@
   --popover-foreground: #f2ebe8;
   --primary: #c4728a;
   --primary-foreground: #ffffff;
-  --secondary: #2e1f26;
+  --secondary: #d5e7b5;
   --secondary-foreground: #f2ebe8;
   --muted: #2e1f26;
   --muted-foreground: #a89098;
@@ -185,5 +185,9 @@
     font-size: var(--text-base);
     font-weight: var(--font-weight-normal);
     line-height: 1.5;
+  }
+
+  .active-gradient {
+    background: linear-gradient(135deg, #934761, #ad5c71);
   }
 }

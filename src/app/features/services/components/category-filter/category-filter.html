@@ -1,10 +1,10 @@
 <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-20 py-10">
   <h2 class="text-xl font-black text-foreground mb-5">Browse by Service</h2>
-  <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3 mb-10">
+  <div class="grid grid-cols-4 lg:grid-cols-8 gap-3 mb-10">
     @for (cat of CATEGORIES; track cat.id) {
       <button
         (click)="setCategory(cat.label)"
-        class="rounded-2xl overflow-hidden relative h-28 group transition-all hover:-translate-y-1 shadow-lg"
+        class="rounded-2xl overflow-hidden relative h-15 lg:h-28 group transition-all hover:-translate-y-1 shadow-lg"
         [class.ring-3]="activeCategory() === cat.label"
         [class.ring-primary]="activeCategory() === cat.label"
       >

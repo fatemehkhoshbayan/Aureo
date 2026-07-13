@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { NAV_LINKS } from './constants';
 @Component({
@@ -9,4 +9,23 @@ import { NAV_LINKS } from './constants';
 })
 export class Header {
   protected readonly NAV_LINKS = NAV_LINKS;
+  mobileMenuOpen = signal(false);
+  darkMode = signal(false);
+
+  toggleMobileMenu() {
+    this.mobileMenuOpen.update((open) => !open);
+  }
+
+  closeMobileMenu() {
+    this.mobileMenuOpen.set(false);
+  }
+
+  toggleDarkMode() {
+    this.darkMode.update((dark) => !dark);
+    if (this.darkMode()) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }
 }

@@ -1,5 +1,7 @@
-<header class="flex w-full top-0 z-50 bg-card/80 backdrop-blur-md border-b border-border py-2">
-  <div class="flex w-full max-w-7xl mx-auto items-center justify-between">
+<header
+  class="relative flex w-full top-0 z-50 bg-card/80 backdrop-blur-md border-b border-border py-2"
+>
+  <div class="flex w-full max-w-7xl mx-auto items-center justify-between px-4">
     <a
       routerLink="/"
       routerLinkActive="border-primary"
@@ -9,7 +11,8 @@
       <img src="aureo_logo_concept.png" alt="Aureo" width="250" height="300" />
     </a>
 
-    <nav class="flex items-center gap-1">
+    <!-- Desktop nav -->
+    <nav class="hidden lg:flex items-center gap-1">
       @for (link of NAV_LINKS; track link.id) {
         <a
           [routerLink]="link.href"
@@ -18,15 +21,54 @@
           [routerLinkActiveOptions]="link.href === '/' ? { exact: true } : { exact: false }"
         >
           <span [class]="link.icon + ' text-xl'"></span>
-          {{ link.label }}</a
-        >
+          {{ link.label }}
+        </a>
       }
     </nav>
 
     <div class="flex items-center gap-2">
       <button
-        class="w-9 h-9 rounded-xl flex items-center justify-center border border-border hover:border-primary/40 text-muted-foreground hover:text-foreground transition-all"
-      ></button>
+        class="w-9 h-9 rounded-xl flex items-center justify-center border border-border hover:border-primary/40 text-muted-foreground hover:text-foreground transition-all hover:bg-primary/10"
+        (click)="toggleDarkMode()"
+      >
+        <span
+          [class]="(darkMode() ? 'icon-[lucide--moon]' : 'icon-[lucide--sun]') + ' text-2xl'"
+        ></span>
+      </button>
+
+      <!-- Mobile menu toggle -->
+      <button
+        type="button"
+        class="lg:hidden w-9 h-9 rounded-xl flex items-center justify-center border border-border hover:border-primary/40 text-muted-foreground hover:text-foreground transition-all hover:bg-primary/10"
+        (click)="toggleMobileMenu()"
+      >
+        <span
+          [class]="
+            (mobileMenuOpen() ? 'icon-[lucide--x]' : 'icon-[lucide--menu-square]') + ' text-2xl'
+          "
+        ></span>
+      </button>
     </div>
   </div>
+
+  <!-- Mobile menu panel -->
+  @if (mobileMenuOpen()) {
+    <div
+      class="lg:hidden z-50 border-t border-border bg-card px-4 py-3 space-y-1 absolute top-full left-0 right-0 w-full shadow-md"
+    >
+      @for (link of NAV_LINKS; track link.id) {
+        <a
+          [routerLink]="link.href"
+          routerLinkActive="text-white bg-linear-to-r from-[#934761] to-[#AD5C71]"
+          [routerLinkActiveOptions]="link.href === '/' ? { exact: true } : { exact: false }"
+          [class]=""
+          class="w-full flex items-center gap-2.5 px-4 py-3 rounded-xl text-sm font-semibold text-left transition-all text-primary"
+          (click)="closeMobileMenu()"
+        >
+          <span [class]="link.icon + ' text-xl'"></span>
+          {{ link.label }}
+        </a>
+      }
+    </div>
+  }
 </header>
