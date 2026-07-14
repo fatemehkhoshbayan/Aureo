@@ -11,16 +11,12 @@ export class Sidebar {
   protected readonly SPECIALTIES = SPECIALTIES;
   protected readonly PRICE_OPTIONS = PRICE_OPTIONS;
 
-  category = input.required<string>();
+  photographers = input.required<string[]>();
+  photographerFilter = input.required<string>();
   priceFilter = input.required<string>();
   showFilters = input.required<boolean>();
-  changed = output<string>();
 
-  setCategory(value: string) {
-    this.changed.emit(value);
-  }
-
-  setPriceFilter(value: string) {
-    this.changed.emit(value);
-  }
+  photographerChanged = output<string>();
+  priceChanged = output<string>();
+  clearAllFilters = output<void>();
 }

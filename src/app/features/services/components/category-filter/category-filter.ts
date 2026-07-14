@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { CATEGORIES } from '../constants';
 
 @Component({
@@ -7,9 +7,7 @@ import { CATEGORIES } from '../constants';
 })
 export class CategoryFilter {
   protected readonly CATEGORIES = CATEGORIES;
-  activeCategory = signal<string | null>(null);
 
-  setCategory(category: string) {
-    this.activeCategory.set(category);
-  }
+  categoryFilter = input.required<string>();
+  categoryChanged = output<string>();
 }

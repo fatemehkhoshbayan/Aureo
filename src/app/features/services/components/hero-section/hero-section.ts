@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, model, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { interval } from 'rxjs';
 import { CAROUSEL_SLIDES } from '../constants';
@@ -10,7 +10,7 @@ import { CAROUSEL_SLIDES } from '../constants';
 export class HeroSection {
   protected readonly CAROUSEL_SLIDES = CAROUSEL_SLIDES;
   currentSlide = signal(0);
-  protected search = '';
+  search = model.required<string>();
 
   constructor() {
     interval(4500)
@@ -22,5 +22,9 @@ export class HeroSection {
 
   setSlide(index: number) {
     this.currentSlide.set(index);
+  }
+
+  onSearchInput(value: string) {
+    this.search.set(value);
   }
 }
