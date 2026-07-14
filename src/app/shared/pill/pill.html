@@ -1,0 +1,11 @@
+<button
+  type="button"
+  (click)="select()"
+  class="px-3 py-2 rounded-xl text-sm font-medium w-full text-left transition-all cursor-pointer hover:text-primary hover:bg-primary/20"
+  [class.bg-primary]="current() === value()"
+  [class.text-white]="current() === value()"
+  [class.text-muted-foreground]="current() !== value()"
+  [class.hover:bg-muted]="current() !== value()"
+>
+  {{ label() }}
+</button>

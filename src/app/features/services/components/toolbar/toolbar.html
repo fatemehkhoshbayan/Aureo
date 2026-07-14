@@ -1,0 +1,52 @@
+<div class="flex items-center justify-between mb-5 w-full">
+  <div class="flex items-center gap-3">
+    <button
+      type="button"
+      (click)="filtersToggle.emit()"
+      class="lg:hidden flex items-center gap-2 px-3 py-2 rounded-xl border border-border bg-card text-sm font-medium"
+    >
+      <span class="icon-[lucide--filter] text-base"></span> Filters
+    </button>
+    <p class="text-md text-muted-foreground">
+      <span class="font-semibold text-foreground">{{ count() }}</span> photographers
+    </p>
+  </div>
+  <div class="relative flex items-center gap-2" #sortDropdown>
+    <button
+      type="button"
+      (click)="toggleSortOpen()"
+      (keydown.escape)="sortOpen.set(false)"
+      class="relative min-w-44 rounded-xl shadow-md bg-card py-2 pl-3 pr-10 text-left text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 cursor-pointer hover:bg-muted/30"
+      [attr.aria-expanded]="sortOpen()"
+      aria-haspopup="listbox"
+    >
+      {{ sortLabel() }}
+      <span
+        class="icon-[lucide--chevron-down] pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-base text-muted-foreground transition-transform"
+        [class.rotate-180]="sortOpen()"
+      ></span>
+    </button>
+
+    @if (sortOpen()) {
+      <ul
+        cdkListbox
+        [cdkListboxValue]="[sortBy()]"
+        (cdkListboxValueChange)="selectSort($event.value[0])"
+        class="absolute right-0 z-20 top-full mt-2 min-w-full overflow-hidden rounded-xl shadow-md bg-card p-2"
+      >
+        @for (option of SORT_OPTIONS; track option.value) {
+          <li
+            [cdkOption]="option.value"
+            class="w-full rounded-lg p-2 text-left text-sm text-primary font-medium cursor-pointer transition-all"
+            [class.bg-primary]="sortBy() === option.value"
+            [class.text-white]="sortBy() === option.value"
+            [class.text-foreground]="sortBy() !== option.value"
+            [class.hover:bg-muted]="sortBy() !== option.value"
+          >
+            {{ option.label }}
+          </li>
+        }
+      </ul>
+    }
+  </div>
+</div>
