@@ -6,6 +6,7 @@ Aureo is a photography booking web app — _Photography, beautifully booked._ Th
 
 - **Angular 22** — standalone components, signals, and the application builder
 - **Tailwind CSS 4** — custom design tokens and dark mode
+- **Angular CDK** — accessible listbox for sort controls
 - **Iconify** — Lucide icons via `@iconify/tailwind4`
 - **Vitest** — unit tests via `@angular/build:unit-test`
 - **TypeScript 6** with path aliases (`@/*`, `@layout/*`, `@features/*`, `@shared/*`)
@@ -14,13 +15,31 @@ Aureo is a photography booking web app — _Photography, beautifully booked._ Th
 
 ```
 src/app/
-├── features/          # Route-level pages (services, not-found, …)
-├── layout/            # Shell components (header, footer, main-layout)
-│   ├── header/
-│   └── footer/
-├── app.routes.ts      # Application routing
-└── app.ts             # Root component
-public/                # Static assets (logos, favicon)
+├── features/
+│   ├── services/              # Home page — browse & search photographers
+│   │   ├── components/
+│   │   │   ├── hero-section/      # Carousel hero with search
+│   │   │   ├── services-list/     # Grid, filters, sorting, toolbar
+│   │   │   ├── photographer-card/ # Individual photographer card
+│   │   │   ├── category-filter/   # Category pill scroller
+│   │   │   ├── sidebar/         # Filter sidebar (photographer, price)
+│   │   │   ├── toolbar/         # Result count, sort, filter toggle
+│   │   │   ├── constants.ts     # Mock data (photographers, categories, …)
+│   │   │   └── interfaces.ts    # Photographer, Category, CarouselSlide types
+│   │   ├── utils.ts           # formatPrice, formatDate helpers
+│   │   └── services.ts        # Page component — search + filtered list
+│   └── not-found/             # 404 page
+├── layout/
+│   ├── header/                # Nav, mobile menu, dark mode toggle
+│   ├── footer/                # Site footer
+│   └── main-layout/           # Shell wrapping header + router-outlet + footer
+├── shared/
+│   ├── pill/                  # Reusable pill / tag component
+│   ├── skeleton-card/         # Loading placeholder for cards
+│   └── star-rating/           # Star rating display
+├── app.routes.ts
+└── app.ts
+public/                        # Static assets (logos, favicon)
 ```
 
 ## Routes
@@ -34,6 +53,24 @@ public/                # Static assets (logos, favicon)
 | `/terms`       | —         | Planned     |
 | `/contact`     | —         | Planned     |
 | `/**`          | Not Found | Implemented |
+
+## Features
+
+### Services page (`/`)
+
+- **Hero section** — auto-rotating image carousel with search input
+- **Search** — filter photographers by name or specialty (wired from hero to list)
+- **Category filter** — horizontal scrollable category pills
+- **Sidebar filters** — filter by photographer name and price range
+- **Sorting** — by rating, price (low → high), or price (high → low)
+- **Photographer cards** — avatar, cover, specialties, rating, starting price, like toggle
+- **Loading state** — skeleton cards while data loads
+- **Responsive layout** — collapsible filter sidebar on mobile
+
+### Layout
+
+- **Header** — sticky nav with active route highlighting, mobile menu, dark mode toggle
+- **Footer** — site links and branding
 
 ## Getting started
 
@@ -81,7 +118,7 @@ ng generate --help
 
 ## Styling
 
-Global styles and design tokens live in `src/styles.css`. The theme uses CSS custom properties for colors, typography (Outfit & DM Sans), and spacing. Dark mode is available via the `.dark` class.
+Global styles and design tokens live in `src/styles.css`. The theme uses CSS custom properties for colors, typography (Outfit & DM Sans), and spacing. Dark mode is toggled via the header and applied with the `.dark` class on `<html>`.
 
 ## Additional resources
 
