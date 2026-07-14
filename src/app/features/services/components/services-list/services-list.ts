@@ -1,62 +1,63 @@
 import { SkeletonCard } from '@/shared';
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, input, signal } from '@angular/core';
 import { PhotographerCard } from '../../components/photographer-card/photographer-card';
 import { Sidebar } from '../../components/sidebar/sidebar';
-import { PHOTOGRAPHERS, PRICE_OPTIONS, SORT_OPTIONS, SPECIALTIES } from '../constants';
+import { CategoryFilter } from '../category-filter/category-filter';
+import { PRICE_OPTIONS, SORT_OPTIONS, SPECIALTIES } from '../constants';
+import { Photographer } from '../interfaces';
 import { Toolbar } from '../toolbar/toolbar';
 
 type SortOption = (typeof SORT_OPTIONS)[number]['value'];
 
 @Component({
   selector: 'app-services-list',
-  imports: [Sidebar, Toolbar, SkeletonCard, PhotographerCard],
+  imports: [Sidebar, Toolbar, SkeletonCard, PhotographerCard, CategoryFilter],
   templateUrl: './services-list.html',
 })
 export class ServicesList {
-  protected readonly PHOTOGRAPHERS = PHOTOGRAPHERS;
   protected readonly SPECIALTIES = SPECIALTIES;
   protected readonly PRICE_OPTIONS = PRICE_OPTIONS;
 
+  photographers = input.required<Photographer[]>();
   sortBy = signal<SortOption>('rating');
-  search = signal('');
   loading = signal(false);
   liked = signal<Set<string | number>>(new Set());
-  category = signal('All');
+  categoryFilter = signal('All');
+  photographerFilter = signal('All');
   priceFilter = signal('All');
   showFilters = signal(false);
 
+  photographersName = computed(() => this.photographers().map((photographer) => photographer.name));
+
   filtered = computed(() => {
-    let result = this.PHOTOGRAPHERS;
+    let result = this.photographers();
 
-    // if (this.category() !== 'All') {
-    //   result = result.filter(
-    //     (photographer: Photographer) => photographer.category === this.category(),
-    //   );
-    // }
+    if (this.photographerFilter() !== 'All') {
+      result = result.filter((photographer) => photographer.name === this.photographerFilter());
+    }
 
-    // if (this.priceFilter() !== 'All') {
-    //   result = result.filter((photographer: Photographer) =>
-    //     this.matchesPriceRange(photographer.price, this.priceFilter()),
-    //   );
-    // }
+    if (this.priceFilter() !== 'All') {
+      result = result.filter((photographer: Photographer) =>
+        this.matchesPriceRange(photographer.startingPrice, this.priceFilter()),
+      );
+    }
 
-    // const search = this.search().toLowerCase().trim();
-    // if (search) {
-    //   result = result.filter((photographer: Photographer) =>
-    //     photographer.name.toLowerCase().includes(search),
-    //   );
-    // }
+    if (this.categoryFilter() !== 'All') {
+      result = result.filter((photographer: Photographer) =>
+        photographer.specialties.includes(this.categoryFilter()),
+      );
+    }
 
-    // const sorted = [...result];
-    // if (this.sortBy() === 'rating') {
-    //   sorted.sort((a, b) => b.rating - a.rating);
-    // } else if (this.sortBy() === 'price-asc') {
-    //   sorted.sort((a, b) => a.price - b.price);
-    // } else if (this.sortBy() === 'price-desc') {
-    //   sorted.sort((a, b) => b.price - a.price);
-    // }
+    const sorted = [...result];
+    if (this.sortBy() === 'rating') {
+      sorted.sort((a, b) => b.rating - a.rating);
+    } else if (this.sortBy() === 'price-asc') {
+      sorted.sort((a, b) => a.startingPrice - b.startingPrice);
+    } else if (this.sortBy() === 'price-desc') {
+      sorted.sort((a, b) => b.startingPrice - a.startingPrice);
+    }
 
-    return result;
+    return sorted;
   });
 
   private matchesPriceRange(price: number, range: string): boolean {
@@ -81,13 +82,17 @@ export class ServicesList {
   }
 
   clearAllFilters() {
-    this.search.set('');
-    this.category.set('All');
+    this.photographerFilter.set('All');
+    this.categoryFilter.set('All');
     this.priceFilter.set('All');
   }
 
-  setCategory(value: string) {
-    this.category.set(value);
+  setPhotographerFilter(value: string) {
+    this.photographerFilter.set(value);
+  }
+
+  setCategory(category: string) {
+    this.categoryFilter.set(category);
   }
 
   setPriceFilter(value: string) {
