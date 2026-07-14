@@ -1,5 +1,6 @@
-<section class="flex flex-col gap-10">
-  <app-hero-section />
-  <app-category-filter />
-  <app-services-list />
+<section class="flex flex-col">
+  <app-hero-section [(search)]="search" />
+  <div class="flex flex-col max-w-8xl mx-auto px-4 sm:px-6 lg:px-20 py-20">
+    <app-services-list [photographers]="filteredPhotographers()" />
+  </div>
 </section>
