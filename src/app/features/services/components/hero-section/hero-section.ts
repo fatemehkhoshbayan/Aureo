@@ -5,9 +5,7 @@ import { CAROUSEL_SLIDES } from '../constants';
 
 @Component({
   selector: 'app-hero-section',
-  imports: [],
   templateUrl: './hero-section.html',
-  styles: ``,
 })
 export class HeroSection {
   protected readonly CAROUSEL_SLIDES = CAROUSEL_SLIDES;
@@ -18,7 +16,7 @@ export class HeroSection {
     interval(4500)
       .pipe(takeUntilDestroyed())
       .subscribe(() => {
-        this.currentSlide.update((s) => (s + 1) % this.CAROUSEL_SLIDES.length);
+        this.currentSlide.update((slide) => (slide + 1) % this.CAROUSEL_SLIDES.length);
       });
   }
 

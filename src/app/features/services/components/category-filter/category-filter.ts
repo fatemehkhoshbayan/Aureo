@@ -3,9 +3,7 @@ import { CATEGORIES } from '../constants';
 
 @Component({
   selector: 'app-category-filter',
-  imports: [],
   templateUrl: './category-filter.html',
-  styles: ``,
 })
 export class CategoryFilter {
   protected readonly CATEGORIES = CATEGORIES;

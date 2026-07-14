@@ -1,0 +1,70 @@
+<!-- Sidebar filters -->
+<aside class="hidden lg:block w-56 shrink-0">
+  <div class="bg-card rounded-2xl shadow-md p-5 space-y-6 sticky top-24">
+    <div>
+      <p class="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3">
+        Specialty
+      </p>
+      <div class="flex flex-col gap-2">
+        @for (specialty of SPECIALTIES; track specialty) {
+          <app-pill
+            [label]="specialty"
+            [value]="specialty"
+            [current]="category()"
+            (changed)="setCategory($event)"
+          />
+        }
+      </div>
+    </div>
+    <div class="border-t border-border"></div>
+    <div>
+      <p class="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3">
+        Price Range
+      </p>
+      <div class="flex flex-col gap-2">
+        @for (price of PRICE_OPTIONS; track price) {
+          <app-pill
+            [label]="price"
+            [value]="price"
+            [current]="priceFilter()"
+            (changed)="setPriceFilter($event)"
+          />
+        }
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- Mobile filters -->
+@if (showFilters()) {
+  <div class="lg:hidden bg-card rounded-2xl shadow-md p-5 mb-5 space-y-4">
+    <div>
+      <p class="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-2">
+        Specialty
+      </p>
+      <div class="flex flex-wrap gap-2">
+        @for (specialty of SPECIALTIES; track specialty) {
+          <app-pill
+            [label]="specialty"
+            [value]="specialty"
+            [current]="category()"
+            (changed)="setCategory($event)"
+          />
+        }
+      </div>
+    </div>
+    <div>
+      <p class="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-2">Price</p>
+      <div class="flex flex-wrap gap-2">
+        @for (price of PRICE_OPTIONS; track price) {
+          <app-pill
+            [label]="price"
+            [value]="price"
+            [current]="priceFilter()"
+            (changed)="setPriceFilter($event)"
+          />
+        }
+      </div>
+    </div>
+  </div>
+}

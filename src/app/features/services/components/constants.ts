@@ -1,4 +1,4 @@
-import { CarouselSlide, Category } from './interfaces';
+import { CarouselSlide, Category, Photographer } from './interfaces';
 
 export const CAROUSEL_SLIDES: CarouselSlide[] = [
   {
@@ -33,3 +33,22 @@ export const CATEGORIES: Category[] = [
   { id: 7, label: 'Maternity', image: 'photo-1492725764893-90b379c2b6e7', from: 195 },
   { id: 8, label: 'Newborn', image: 'photo-1556910103-1c02745aae4d', from: 195 },
 ];
+
+export const SPECIALTIES = [
+  'All',
+  'Wedding',
+  'Portrait',
+  'Corporate',
+  'Family',
+  'Birthday',
+  'Editorial',
+];
+export const PRICE_OPTIONS = ['All', 'Under $100', '$100–$300', '$300+'];
+
+export const PHOTOGRAPHERS: Photographer[] = [];
+
+export const SORT_OPTIONS = [
+  { value: 'rating', label: 'Top Rated' },
+  { value: 'price-asc', label: 'Price: Low → High' },
+  { value: 'price-desc', label: 'Price: High → Low' },
+] as const;
