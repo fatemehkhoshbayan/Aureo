@@ -1,0 +1,15 @@
+<div
+  class="flex items-center gap-0.5"
+  role="img"
+  [attr.aria-label]="rating() + ' out of ' + maxStars() + ' stars'"
+>
+  @for (star of stars(); track star.id) {
+    <span
+      [class]="
+        'icon-[lucide--star] size-(--star-size) transition-colors ' +
+        (star.active ? 'text-yellow' : 'text-gray')
+      "
+      [style.--star-size.px]="size()"
+    ></span>
+  }
+</div>
