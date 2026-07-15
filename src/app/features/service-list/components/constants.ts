@@ -1,4 +1,5 @@
-import { CarouselSlide, Category, Photographer } from './interfaces';
+import { Photographer } from '@/services';
+import { CarouselSlide, Category } from '../../interfaces';
 
 export const CAROUSEL_SLIDES: CarouselSlide[] = [
   {
@@ -293,7 +294,7 @@ export const PHOTOGRAPHERS: Photographer[] = [
       },
       {
         id: 'po5',
-        image: 'photo-1569233460038-2ef5a1c7ed38',
+        image: 'photo-1541956799312-3f9df99e0006',
         category: 'Maternity',
         alt: 'Outdoor maternity',
       },

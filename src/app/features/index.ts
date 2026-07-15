@@ -1,2 +1,3 @@
 export { NotFound } from './not-found/not-found';
-export { Services } from './services/services';
+export { PhotographerInfo } from './photographer-info/photographer-info';
+export { ServicesList } from './service-list/services-list';

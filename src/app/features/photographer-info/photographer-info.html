@@ -1,0 +1,41 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <button
+    (click)="goBack()"
+    class="flex items-center gap-2 text-primary hover:bg-primary/10 py-1 px-3 rounded-md transition-colors mb-6"
+  >
+    <span class="icon-[lucide--chevron-left] text-primary text-xl"></span>
+    <span class="text-sm font-medium">Back to Photographers</span>
+  </button>
+
+  @if (photographer(); as photographer) {
+    <!-- Cover + Avatar -->
+    <div class="relative rounded-3xl overflow-hidden mb-6 bg-muted h-[350px]">
+      <img
+        [src]="
+          'https://images.unsplash.com/' + photographer.cover + '?w=1200&h=400&fit=crop&auto=format'
+        "
+        [alt]="photographer.cover"
+        class="w-full h-full object-cover"
+      />
+      <div class="absolute inset-0 bg-linear-to-t from-black/60 via-black/20 to-transparent"></div>
+      <button
+        (click)="toggleLike()"
+        class="absolute top-5 right-5 w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center hover:scale-110 transition-transform shadow"
+      >
+        <span class="icon-[lucide--heart] text-primary text-xl"></span>
+      </button>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <app-about-photographer [photographer]="photographer"></app-about-photographer>
+      <app-cta-packages [photographer]="photographer"></app-cta-packages>
+    </div>
+  } @else {
+    <div class="flex items-center justify-center h-full gap-8 p-20">
+      <span
+        class="icon-[lucide--camera-off] text-2xl text-secondary-dark bg-secondary/30 p-4 rounded-full"
+      ></span>
+      <div class="text-center text-2xl font-bold">No photographer found!</div>
+    </div>
+  }
+</div>

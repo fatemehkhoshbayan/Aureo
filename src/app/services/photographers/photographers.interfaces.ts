@@ -1,17 +1,4 @@
-export interface CarouselSlide {
-  id: string | number;
-  label: string;
-  image: string;
-}
-
-export interface Category {
-  id: number;
-  label: string;
-  image: string;
-  from: number;
-}
-
-interface PortfolioItem {
+export interface PortfolioItem {
   id: string;
   image: string;
   category: string;
@@ -27,7 +14,7 @@ interface Package {
   includes: string[];
 }
 
-interface Review {
+export interface Review {
   id: string;
   author: string;
   avatar: string;
@@ -53,9 +40,4 @@ export interface Photographer {
   packages: Package[];
   reviews: Review[];
   featured: boolean;
-}
-
-export interface SortOption<T extends string = string> {
-  value: T;
-  label: string;
 }

@@ -8,7 +8,9 @@
       "@/*": ["./src/app/*"],
       "@layout/*": ["./src/app/layout/*"],
       "@features/*": ["./src/app/features/*"],
-      "@shared/*": ["./src/app/shared/*"]
+      "@shared/*": ["./src/app/shared/*"],
+      "@services/*": ["./src/app/services/*"],
+      "@utils/*": ["./src/app/utils/*"]
     },
     "types": []
   },
