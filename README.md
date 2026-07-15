@@ -9,50 +9,60 @@ Aureo is a photography booking web app — _Photography, beautifully booked._ Th
 - **Angular CDK** — accessible listbox for sort controls
 - **Iconify** — Lucide icons via `@iconify/tailwind4`
 - **Vitest** — unit tests via `@angular/build:unit-test`
-- **TypeScript 6** with path aliases (`@/*`, `@layout/*`, `@features/*`, `@shared/*`)
+- **TypeScript 6** with path aliases (`@/*`, `@layout/*`, `@features/*`, `@shared/*`, `@services/*`, `@utils/*`)
 
 ## Project structure
 
 ```
 src/app/
 ├── features/
-│   ├── services/              # Home page — browse & search photographers
+│   ├── service-list/              # Home page — browse & search photographers
 │   │   ├── components/
-│   │   │   ├── hero-section/      # Carousel hero with search
-│   │   │   ├── services-list/     # Grid, filters, sorting, toolbar
-│   │   │   ├── photographer-card/ # Individual photographer card
-│   │   │   ├── category-filter/   # Category pill scroller
-│   │   │   ├── sidebar/         # Filter sidebar (photographer, price)
-│   │   │   ├── toolbar/         # Result count, sort, filter toggle
-│   │   │   ├── constants.ts     # Mock data (photographers, categories, …)
-│   │   │   └── interfaces.ts    # Photographer, Category, CarouselSlide types
-│   │   ├── utils.ts           # formatPrice, formatDate helpers
-│   │   └── services.ts        # Page component — search + filtered list
-│   └── not-found/             # 404 page
+│   │   │   ├── hero-section/          # Carousel hero with search
+│   │   │   ├── photographers-list/    # Grid, filters, sorting, toolbar
+│   │   │   ├── photographer-card/     # Individual photographer card
+│   │   │   ├── category-filter/       # Category pill scroller
+│   │   │   ├── sidebar/               # Filter sidebar (photographer, price)
+│   │   │   ├── toolbar/               # Result count, sort, filter toggle
+│   │   │   └── constants.ts           # Mock data (photographers, categories, …)
+│   │   └── services-list.ts           # Page component — search + filtered list
+│   ├── photographer-info/         # Photographer profile page
+│   │   ├── components/
+│   │   │   ├── about-photographer/    # Bio, specialties, portfolio, reviews
+│   │   │   ├── portfolio-gallery/     # Portfolio image grid
+│   │   │   ├── reviews/               # Client reviews list
+│   │   │   └── cta-packages/          # Pricing packages & booking CTA
+│   │   └── photographer-info.ts       # Page component — load by route id
+│   ├── interfaces.ts              # Shared feature types (Category, CarouselSlide, …)
+│   └── not-found/                 # 404 page
+├── services/
+│   └── photographers/             # PhotographersService + Photographer types
 ├── layout/
-│   ├── header/                # Nav, mobile menu, dark mode toggle
-│   ├── footer/                # Site footer
-│   └── main-layout/           # Shell wrapping header + router-outlet + footer
+│   ├── header/                    # Nav, mobile menu, dark mode toggle
+│   ├── footer/                    # Site footer
+│   └── main-layout/               # Shell wrapping header + router-outlet + footer
 ├── shared/
-│   ├── pill/                  # Reusable pill / tag component
-│   ├── skeleton-card/         # Loading placeholder for cards
-│   └── star-rating/           # Star rating display
+│   ├── pill/                      # Reusable pill / tag component
+│   ├── skeleton-card/             # Loading placeholder for cards
+│   └── star-rating/               # Star rating display
+├── utils.ts                       # formatPrice, formatDate helpers
 ├── app.routes.ts
 └── app.ts
-public/                        # Static assets (logos, favicon)
+public/                            # Static assets (logos, favicon)
 ```
 
 ## Routes
 
-| Path           | Component | Status      |
-| -------------- | --------- | ----------- |
-| `/`            | Services  | Implemented |
-| `/my-bookings` | —         | Planned     |
-| `/my-profile`  | —         | Planned     |
-| `/privacy`     | —         | Planned     |
-| `/terms`       | —         | Planned     |
-| `/contact`     | —         | Planned     |
-| `/**`          | Not Found | Implemented |
+| Path                 | Component         | Status      |
+| -------------------- | ----------------- | ----------- |
+| `/`                  | ServicesList      | Implemented |
+| `/photographer/:id`  | PhotographerInfo  | Implemented |
+| `/my-bookings`       | —                 | Planned     |
+| `/my-profile`        | —                 | Planned     |
+| `/privacy`           | —                 | Planned     |
+| `/terms`             | —                 | Planned     |
+| `/contact`           | —                 | Planned     |
+| `/**`                | Not Found         | Implemented |
 
 ## Features
 
@@ -63,9 +73,19 @@ public/                        # Static assets (logos, favicon)
 - **Category filter** — horizontal scrollable category pills
 - **Sidebar filters** — filter by photographer name and price range
 - **Sorting** — by rating, price (low → high), or price (high → low)
-- **Photographer cards** — avatar, cover, specialties, rating, starting price, like toggle
+- **Photographer cards** — avatar, cover, specialties, rating, starting price, like toggle; navigate to profile
 - **Loading state** — skeleton cards while data loads
 - **Responsive layout** — collapsible filter sidebar on mobile
+
+### Photographer info (`/photographer/:id`)
+
+- **Cover & identity** — cover image, avatar, name, location, and experience
+- **About** — bio and specialty tags
+- **Portfolio gallery** — sample work grid
+- **Reviews** — client ratings and comments
+- **Packages CTA** — pricing packages with booking call-to-action
+- **Back navigation** — return to the photographers list
+- **Not found state** — shown when the photographer id is invalid
 
 ### Layout
 
