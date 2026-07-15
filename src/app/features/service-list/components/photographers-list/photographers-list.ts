@@ -1,24 +1,26 @@
+import { Photographer } from '@/services';
 import { SkeletonCard } from '@/shared';
-import { Component, computed, input, signal } from '@angular/core';
-import { PhotographerCard } from '../../components/photographer-card/photographer-card';
-import { Sidebar } from '../../components/sidebar/sidebar';
+import { Component, computed, input, output, signal } from '@angular/core';
 import { CategoryFilter } from '../category-filter/category-filter';
 import { PRICE_OPTIONS, SORT_OPTIONS, SPECIALTIES } from '../constants';
-import { Photographer } from '../interfaces';
+import { PhotographerCard } from '../photographer-card/photographer-card';
+import { Sidebar } from '../sidebar/sidebar';
 import { Toolbar } from '../toolbar/toolbar';
 
 type SortOption = (typeof SORT_OPTIONS)[number]['value'];
 
 @Component({
-  selector: 'app-services-list',
+  selector: 'app-photographers-list',
   imports: [Sidebar, Toolbar, SkeletonCard, PhotographerCard, CategoryFilter],
-  templateUrl: './services-list.html',
+  templateUrl: './photographers-list.html',
 })
-export class ServicesList {
+export class PhotographersList {
   protected readonly SPECIALTIES = SPECIALTIES;
   protected readonly PRICE_OPTIONS = PRICE_OPTIONS;
 
   photographers = input.required<Photographer[]>();
+  viewed = output<string>();
+
   sortBy = signal<SortOption>('rating');
   loading = signal(false);
   liked = signal<Set<string | number>>(new Set());
@@ -101,5 +103,9 @@ export class ServicesList {
 
   toggleFilters() {
     this.showFilters.update((v) => !v);
+  }
+
+  onView(id: string) {
+    this.viewed.emit(id);
   }
 }

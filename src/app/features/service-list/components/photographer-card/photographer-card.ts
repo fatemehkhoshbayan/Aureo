@@ -1,7 +1,7 @@
+import { Photographer } from '@/services';
 import { StarRating } from '@/shared';
+import { formatPrice } from '@/utils';
 import { Component, input, output } from '@angular/core';
-import { formatPrice } from '../../utils';
-import { Photographer } from '../interfaces';
 
 @Component({
   selector: 'app-photographer-card',
@@ -13,7 +13,7 @@ export class PhotographerCard {
   photographer = input.required<Photographer>();
   liked = input.required<boolean>();
   liked_ = output<void>();
-  viewed = output<void>();
+  viewed = output<string>();
 
   onLike(event: Event) {
     event.stopPropagation();
@@ -21,6 +21,6 @@ export class PhotographerCard {
   }
 
   onView() {
-    this.viewed.emit();
+    this.viewed.emit(this.photographer().id);
   }
 }

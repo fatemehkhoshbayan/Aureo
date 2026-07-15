@@ -48,7 +48,7 @@
               [photographer]="photographer"
               [liked]="liked().has(photographer.id)"
               (liked_)="toggleLike(photographer.id)"
-              /* (viewed)="onView(photographer)" */
+              (viewed)="onView(photographer.id)"
             />
           }
         </div>
