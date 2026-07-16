@@ -10,6 +10,10 @@
   },
   "private": true,
   "packageManager": "npm@11.16.0",
+  "engines": {
+    "node": ">=22.22.3"
+  },
+
   "dependencies": {
     "@angular/cdk": "^22.0.4",
     "@angular/common": "^22.0.0",
