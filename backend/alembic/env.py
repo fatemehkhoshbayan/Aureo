@@ -1,4 +1,4 @@
-"""Alembic environment for TicketNest migrations."""
+"""Alembic environment for Aureo migrations."""
 
 from logging.config import fileConfig
 
