@@ -102,3 +102,12 @@ See [`backend/.env.example`](backend/.env.example):
 ## Frontend
 
 Angular app under `frontend/`. Not wired to this API yet — still uses local mock constants.
+
+### Deploy on Vercel
+
+1. In the Vercel project → **Settings → General → Root Directory** → set to `frontend` (Required after the monorepo move).
+2. **Settings → General → Node.js Version** → `22.x` (Angular 22 needs Node ≥ 22.22.3).
+3. Build settings (also in [`frontend/vercel.json`](frontend/vercel.json)):
+   - **Build Command:** `npm run build`
+   - **Output Directory:** `dist/aureo/browser`
+4. Redeploy.
