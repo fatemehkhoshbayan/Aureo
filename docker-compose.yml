@@ -2,15 +2,15 @@ services:
   db:
     image: postgres:16-alpine
     environment:
-      POSTGRES_USER: ticketnest
-      POSTGRES_PASSWORD: ticketnest
-      POSTGRES_DB: ticketnest
+      POSTGRES_USER: aureo
+      POSTGRES_PASSWORD: aureo
+      POSTGRES_DB: aureo
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ticketnest -d ticketnest"]
+      test: ["CMD-SHELL", "pg_isready -U aureo -d aureo"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -23,7 +23,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      DATABASE_URL: postgresql+psycopg2://ticketnest:ticketnest@db:5432/ticketnest
+      DATABASE_URL: postgresql+psycopg2://aureo:aureo@db:5432/aureo
       JWT_SECRET: change-me-to-a-long-random-secret
       CORS_ORIGINS: http://localhost:4200,http://localhost:8000
       SEED_ON_STARTUP: "true"
