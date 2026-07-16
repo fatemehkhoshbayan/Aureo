@@ -1,7 +1,7 @@
 <div class="flex flex-col py-8">
   <h2 class="text-xl font-black text-foreground mb-5">Browse by Service</h2>
   <div class="grid grid-cols-4 lg:grid-cols-8 gap-3 mb-10">
-    @for (cat of CATEGORIES; track cat.id) {
+    @for (cat of categories(); track cat.id) {
       <button
         (click)="categoryChanged.emit(cat.label)"
         class="rounded-2xl overflow-hidden relative h-15 lg:h-28 group transition-all hover:-translate-y-1 shadow-lg"

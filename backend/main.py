@@ -21,7 +21,7 @@ async def lifespan(_: FastAPI):
 settings = get_settings()
 
 app = FastAPI(
-    title="TicketNest API",
+    title="Aureo API",
     description="Backend API for photographers, categories, users, and bookings",
     version="1.0.0",
     lifespan=lifespan,

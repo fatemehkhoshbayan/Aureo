@@ -11,7 +11,7 @@ import { HeroSection, PhotographersList } from './components';
 export class ServicesList {
   private readonly router = inject(Router);
   private readonly photographersService = inject(PhotographersService);
-  protected readonly photographers = computed(() => this.photographersService.getAll());
+  protected readonly photographers = this.photographersService.photographers;
 
   search = signal<string>('');
 

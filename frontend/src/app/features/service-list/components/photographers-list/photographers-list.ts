@@ -1,6 +1,6 @@
-import { Photographer } from '@/services';
+import { Photographer, PhotographersService } from '@/services';
 import { SkeletonCard } from '@/shared';
-import { Component, computed, input, output, signal } from '@angular/core';
+import { Component, computed, inject, input, output, signal } from '@angular/core';
 import { CategoryFilter } from '../category-filter/category-filter';
 import { PRICE_OPTIONS, SORT_OPTIONS, SPECIALTIES } from '../constants';
 import { PhotographerCard } from '../photographer-card/photographer-card';
@@ -15,6 +15,8 @@ type SortOption = (typeof SORT_OPTIONS)[number]['value'];
   templateUrl: './photographers-list.html',
 })
 export class PhotographersList {
+  private readonly photographersService = inject(PhotographersService);
+
   protected readonly SPECIALTIES = SPECIALTIES;
   protected readonly PRICE_OPTIONS = PRICE_OPTIONS;
 
@@ -22,7 +24,7 @@ export class PhotographersList {
   viewed = output<string>();
 
   sortBy = signal<SortOption>('rating');
-  loading = signal(false);
+  loading = this.photographersService.loading;
   liked = signal<Set<string | number>>(new Set());
   categoryFilter = signal('All');
   photographerFilter = signal('All');

@@ -620,7 +620,7 @@ DEMO_USERS = [
     {
         "email": "admin@example.com",
         "password": "admin123",
-        "full_name": "TicketNest Admin",
+        "full_name": "Aureo Admin",
         "role": UserRole.admin.value,
     },
     {

@@ -36,7 +36,7 @@ docker compose up -d db
 ```bash
 cd backend
 cp .env.example .env
-# set DATABASE_URL=postgresql+psycopg2://ticketnest:ticketnest@localhost:5432/ticketnest
+# set DATABASE_URL=postgresql+psycopg2://aureo:aureo@localhost:5432/aureo
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
@@ -99,15 +99,58 @@ See [`backend/.env.example`](backend/.env.example):
 - `CORS_ORIGINS`
 - `SEED_ON_STARTUP`
 
+### Deploy backend on Render + Neon
+
+**1. Neon database**
+
+1. Create a project at [https://console.neon.tech](https://console.neon.tech).
+2. Open **Dashboard → Connection details**.
+3. Copy the connection string (include `?sslmode=require`), e.g.  
+   `postgresql://user:pass@ep-xxxx.region.aws.neon.tech/neondb?sslmode=require`
+
+**2. Render web service**
+
+1. [Render Dashboard](https://dashboard.render.com) → **New → Web Service** → connect this repo.
+2. Settings:
+
+   | Setting | Value |
+   |---------|--------|
+   | Root Directory | `backend` |
+   | Runtime | **Docker** |
+   | Health Check Path | `/health` |
+   | Plan | Free |
+
+3. Environment variables:
+
+   | Key | Value |
+   |-----|--------|
+   | `DATABASE_URL` | Neon connection string from step 1 |
+   | `JWT_SECRET` | long random string |
+   | `SEED_ON_STARTUP` | `true` |
+   | `CORS_ORIGINS` | `http://localhost:4200,https://your-app.vercel.app` |
+
+4. Deploy → open `https://YOUR-SERVICE.onrender.com/docs`.
+
+(`postgres://` / `postgresql://` URLs are normalized for SQLAlchemy automatically.)
+
+Free Render web services **spin down** after idle; the first request can take ~30–60s.
+
 ## Frontend
 
-Angular app under `frontend/`. Not wired to this API yet — still uses local mock constants.
+Angular app under `frontend/`. Photographers and categories load from the API.
+
+Set the backend URL in [`frontend/src/environment.ts`](frontend/src/environment.ts):
+
+```ts
+apiBase: '/api'                               // Docker Compose (nginx → backend)
+// apiBase: 'http://localhost:8000'           // ng serve talking to local API
+// apiBase: 'https://YOUR-SERVICE.onrender.com' // Vercel → Render
+```
 
 ### Deploy on Vercel
 
-1. In the Vercel project → **Settings → General → Root Directory** → set to `frontend` (Required after the monorepo move).
-2. **Settings → General → Node.js Version** → `22.x` (Angular 22 needs Node ≥ 22.22.3).
-3. Build settings (also in [`frontend/vercel.json`](frontend/vercel.json)):
-   - **Build Command:** `npm run build`
-   - **Output Directory:** `dist/aureo/browser`
-4. Redeploy.
+1. Set `apiBase` to your Render URL in `src/environment.ts`.
+2. Vercel → **Settings → General → Root Directory** → `frontend`.
+3. **Node.js Version** → `22.x`.
+4. Build: `npm run build` → Output: `dist/aureo/browser`.
+5. On Render, set `CORS_ORIGINS` to your Vercel URL.
