@@ -1,147 +1,104 @@
-# Aureo (golden hour)
+# Aureo
 
-Aureo is a photography booking web app — _Photography, beautifully booked._ This repository (`aureo`) contains the Angular frontend.
+Photography booking platform — Angular frontend + FastAPI backend.
 
-## Tech stack
+## Backend (FastAPI)
 
-- **Angular 22** — standalone components, signals, and the application builder
-- **Tailwind CSS 4** — custom design tokens and dark mode
-- **Angular CDK** — accessible listbox for sort controls
-- **Iconify** — Lucide icons via `@iconify/tailwind4`
-- **Vitest** — unit tests via `@angular/build:unit-test`
-- **TypeScript 6** with path aliases (`@/*`, `@layout/*`, `@features/*`, `@shared/*`, `@services/*`, `@utils/*`)
+### Stack
 
-## Project structure
+- FastAPI + Uvicorn
+- PostgreSQL 16
+- SQLAlchemy 2 + Alembic
+- JWT auth (`customer` | `photographer` | `admin`)
 
-```
-src/app/
-├── features/
-│   ├── service-list/              # Home page — browse & search photographers
-│   │   ├── components/
-│   │   │   ├── hero-section/          # Carousel hero with search
-│   │   │   ├── photographers-list/    # Grid, filters, sorting, toolbar
-│   │   │   ├── photographer-card/     # Individual photographer card
-│   │   │   ├── category-filter/       # Category pill scroller
-│   │   │   ├── sidebar/               # Filter sidebar (photographer, price)
-│   │   │   ├── toolbar/               # Result count, sort, filter toggle
-│   │   │   └── constants.ts           # Mock data (photographers, categories, …)
-│   │   └── services-list.ts           # Page component — search + filtered list
-│   ├── photographer-info/         # Photographer profile page
-│   │   ├── components/
-│   │   │   ├── about-photographer/    # Bio, specialties, portfolio, reviews
-│   │   │   ├── portfolio-gallery/     # Portfolio image grid
-│   │   │   ├── reviews/               # Client reviews list
-│   │   │   └── cta-packages/          # Pricing packages & booking CTA
-│   │   └── photographer-info.ts       # Page component — load by route id
-│   ├── interfaces.ts              # Shared feature types (Category, CarouselSlide, …)
-│   └── not-found/                 # 404 page
-├── services/
-│   └── photographers/             # PhotographersService + Photographer types
-├── layout/
-│   ├── header/                    # Nav, mobile menu, dark mode toggle
-│   ├── footer/                    # Site footer
-│   └── main-layout/               # Shell wrapping header + router-outlet + footer
-├── shared/
-│   ├── pill/                      # Reusable pill / tag component
-│   ├── skeleton-card/             # Loading placeholder for cards
-│   └── star-rating/               # Star rating display
-├── utils.ts                       # formatPrice, formatDate helpers
-├── app.routes.ts
-└── app.ts
-public/                            # Static assets (logos, favicon)
-```
-
-## Routes
-
-| Path                 | Component         | Status      |
-| -------------------- | ----------------- | ----------- |
-| `/`                  | ServicesList      | Implemented |
-| `/photographer/:id`  | PhotographerInfo  | Implemented |
-| `/my-bookings`       | —                 | Planned     |
-| `/my-profile`        | —                 | Planned     |
-| `/privacy`           | —                 | Planned     |
-| `/terms`             | —                 | Planned     |
-| `/contact`           | —                 | Planned     |
-| `/**`                | Not Found         | Implemented |
-
-## Features
-
-### Services page (`/`)
-
-- **Hero section** — auto-rotating image carousel with search input
-- **Search** — filter photographers by name or specialty (wired from hero to list)
-- **Category filter** — horizontal scrollable category pills
-- **Sidebar filters** — filter by photographer name and price range
-- **Sorting** — by rating, price (low → high), or price (high → low)
-- **Photographer cards** — avatar, cover, specialties, rating, starting price, like toggle; navigate to profile
-- **Loading state** — skeleton cards while data loads
-- **Responsive layout** — collapsible filter sidebar on mobile
-
-### Photographer info (`/photographer/:id`)
-
-- **Cover & identity** — cover image, avatar, name, location, and experience
-- **About** — bio and specialty tags
-- **Portfolio gallery** — sample work grid
-- **Reviews** — client ratings and comments
-- **Packages CTA** — pricing packages with booking call-to-action
-- **Back navigation** — return to the photographers list
-- **Not found state** — shown when the photographer id is invalid
-
-### Layout
-
-- **Header** — sticky nav with active route highlighting, mobile menu, dark mode toggle
-- **Footer** — site links and branding
-
-## Getting started
-
-### Prerequisites
-
-- Node.js (LTS recommended)
-- npm 11+
-
-### Install dependencies
+### Quick start (Docker)
 
 ```bash
-npm install
+docker compose up --build db backend
 ```
 
-### Development server
+API docs: [http://localhost:8000/docs](http://localhost:8000/docs)
+
+Health check: `GET http://localhost:8000/health`
+
+On startup the backend creates tables and seeds data when `SEED_ON_STARTUP=true`.
+
+### Local run (without Docker for the API)
+
+1. Start Postgres (or use Compose for DB only):
 
 ```bash
-npm start
+docker compose up -d db
 ```
 
-Open [http://localhost:4200](http://localhost:4200). The app reloads automatically when source files change.
-
-### Build
+2. Copy env and install deps:
 
 ```bash
-npm run build
+cd backend
+cp .env.example .env
+# set DATABASE_URL=postgresql+psycopg2://ticketnest:ticketnest@localhost:5432/ticketnest
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
 ```
 
-Production output is written to `dist/`.
-
-### Unit tests
+3. Create tables + seed, then run:
 
 ```bash
-npm test
+python -m app.seed
+uvicorn main:app --reload --port 8000
 ```
 
-### Code scaffolding
-
-Generate new components, directives, pipes, and more with the Angular CLI:
+Optional Alembic migration (schema already matches `create_all`):
 
 ```bash
-ng generate component component-name
-ng generate --help
+alembic upgrade head
 ```
 
-## Styling
+### Endpoints
 
-Global styles and design tokens live in `src/styles.css`. The theme uses CSS custom properties for colors, typography (Outfit & DM Sans), and spacing. Dark mode is toggled via the header and applied with the `.dark` class on `<html>`.
+| Method | Path | Auth |
+|--------|------|------|
+| GET | `/categories` | public |
+| GET | `/categories/{id}` | public |
+| GET | `/photographers` | public (`?specialty=&featured=`) |
+| GET | `/photographers/{id}` | public |
+| POST | `/photographers` | admin or photographer |
+| PATCH | `/photographers/{id}` | admin or owning photographer |
+| POST | `/auth/register` | public |
+| POST | `/auth/login` | public (form: `username`=email, `password`) |
+| GET | `/users/me` | authenticated |
+| GET | `/users` | admin |
+| GET | `/users/{id}` | admin or self |
+| GET | `/bookings` | authenticated (own; admin sees all). `?status=` |
+| GET | `/bookings/{id}` | owner or admin |
 
-## Additional resources
+### Demo users (seeded)
 
-- [Angular documentation](https://angular.dev)
-- [Angular CLI reference](https://angular.dev/tools/cli)
-- [Tailwind CSS documentation](https://tailwindcss.com/docs)
+| Email | Password | Role |
+|-------|----------|------|
+| `admin@example.com` | `admin123` | admin |
+| `customer@example.com` | `customer123` | customer (4 sample bookings) |
+| `photographer@example.com` | `photo123` | photographer (linked to `p7`) |
+
+Seed includes 8 categories, photographers `p1`–`p10`, and for **Casey Customer**:
+
+| Booking | Photographer | Package | When | Status |
+|---------|--------------|---------|------|--------|
+| `b1` | Isabelle Fontaine (`p1`) | Portrait Session | 2025-11-12 | completed |
+| `b2` | Aiko Nakamura (`p3`) | Family Session | 2026-02-08 | completed |
+| `b3` | Marcus Webb (`p2`) | Headshot Session | 2026-04-20 | completed |
+| `b4` | Valentina Cruz (`p5`) | Creative Portrait | 2026-08-15 | upcoming |
+
+### Environment
+
+See [`backend/.env.example`](backend/.env.example):
+
+- `DATABASE_URL`
+- `JWT_SECRET`
+- `CORS_ORIGINS`
+- `SEED_ON_STARTUP`
+
+## Frontend
+
+Angular app under `frontend/`. Not wired to this API yet — still uses local mock constants.
