@@ -27,9 +27,22 @@ class UserOut(BaseModel):
     id: int
     email: str  # plain str — EmailStr rejects reserved TLDs like .local
     full_name: str
+    phone: str | None = None
+    location: str | None = None
+    avatar: str | None = None
+    email_notifications: bool = True
     role: UserRole
     is_active: bool
     created_at: datetime
+
+
+class UserUpdate(BaseModel):
+    email: EmailStr | None = None
+    full_name: str | None = Field(default=None, min_length=1)
+    phone: str | None = None
+    location: str | None = None
+    avatar: str | None = None
+    email_notifications: bool | None = None
 
 
 class Token(BaseModel):

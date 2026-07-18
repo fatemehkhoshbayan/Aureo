@@ -3,10 +3,19 @@ from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.deps import get_current_user
-from app.models import Booking, User, UserRole
+from app.models import Booking, BookingStatus, User, UserRole
 from app.schemas import BookingOut
 
 router = APIRouter(prefix="/bookings", tags=["bookings"])
+
+
+def _get_owned_booking(booking_id: str, db: Session, current_user: User) -> Booking:
+    booking = db.get(Booking, booking_id)
+    if not booking:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Booking not found")
+    if current_user.role != UserRole.admin.value and booking.user_id != current_user.id:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not allowed")
+    return booking
 
 
 @router.get("", response_model=list[BookingOut])
@@ -30,9 +39,25 @@ def get_booking(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ) -> BookingOut:
-    booking = db.get(Booking, booking_id)
-    if not booking:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Booking not found")
-    if current_user.role != UserRole.admin.value and booking.user_id != current_user.id:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not allowed")
+    booking = _get_owned_booking(booking_id, db, current_user)
+    return BookingOut.model_validate(booking)
+
+
+@router.patch("/{booking_id}/cancel", response_model=BookingOut)
+def cancel_booking(
+    booking_id: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+) -> BookingOut:
+    booking = _get_owned_booking(booking_id, db, current_user)
+    if booking.status == BookingStatus.cancelled.value:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Already cancelled")
+    if booking.status != BookingStatus.upcoming.value:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Only upcoming bookings can be cancelled",
+        )
+    booking.status = BookingStatus.cancelled.value
+    db.commit()
+    db.refresh(booking)
     return BookingOut.model_validate(booking)
