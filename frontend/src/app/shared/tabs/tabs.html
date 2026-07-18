@@ -1,0 +1,14 @@
+@for (tab of tabs(); track tab.key) {
+  <button
+    type="button"
+    (click)="selectTab(tab.key)"
+    class="px-5 py-2.5 rounded-lg text-sm font-semibold capitalize transition-all"
+    [style.background]="activeTab() === tab.key ? activeColor() : null"
+    [style.color]="activeTab() === tab.key ? '#fff' : 'var(--muted-foreground)'"
+  >
+    {{ tab.label ?? tab.key }}
+    @if (tab.count !== undefined) {
+      ({{ tab.count }})
+    }
+  </button>
+}
