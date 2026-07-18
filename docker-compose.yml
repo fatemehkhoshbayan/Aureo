@@ -27,6 +27,8 @@ services:
       JWT_SECRET: change-me-to-a-long-random-secret
       CORS_ORIGINS: http://localhost:4200,http://localhost:8000
       SEED_ON_STARTUP: "true"
+    volumes:
+      - backend_uploads:/app/uploads
     depends_on:
       db:
         condition: service_healthy
@@ -46,3 +48,4 @@ services:
 
 volumes:
   postgres_data:
+  backend_uploads:

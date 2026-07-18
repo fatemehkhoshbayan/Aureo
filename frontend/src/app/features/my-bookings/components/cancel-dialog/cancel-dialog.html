@@ -1,0 +1,9 @@
+<app-confirm-modal
+  confirmLabel="Yes, Cancel"
+  cancelLabel="Keep"
+  title="Cancel Booking?"
+  description="Cancellation will be processed and a refund issued within 5–7 business days."
+  [target]="target()"
+  (confirm)="confirmed.emit($event)"
+  (close)="closed.emit()"
+></app-confirm-modal>

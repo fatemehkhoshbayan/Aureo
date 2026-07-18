@@ -1,0 +1,35 @@
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+  <a
+    routerLink="/my-bookings"
+    class="bg-card rounded-2xl shadow-md p-5 text-left hover:border-primary/40 transition-colors group"
+  >
+    <div class="flex items-center justify-between mb-3">
+      <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-secondary">
+        <span class="icon-[lucide--calendar] text-primary text-lg"></span>
+      </div>
+      <span
+        class="icon-[lucide--chevron-right] text-lg text-muted-foreground group-hover:text-primary transition-colors"
+      ></span>
+    </div>
+    <p class="font-bold text-foreground mb-0.5">Upcoming Sessions</p>
+    <p class="text-2xl font-black text-primary">{{ upcomingCount() }}</p>
+    <p class="text-xs text-muted-foreground">confirmed bookings</p>
+  </a>
+
+  <a
+    routerLink="/my-bookings"
+    class="bg-card rounded-2xl shadow-md p-5 text-left hover:border-primary/40 transition-colors group"
+  >
+    <div class="flex items-center justify-between mb-3">
+      <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-secondary">
+        <span class="icon-[lucide--image] text-primary text-lg"></span>
+      </div>
+      <span
+        class="icon-[lucide--chevron-right] text-lg text-muted-foreground group-hover:text-primary transition-colors"
+      ></span>
+    </div>
+    <p class="font-bold text-foreground mb-0.5">Booking History</p>
+    <p class="text-2xl font-black text-primary">{{ totalCount() }}</p>
+    <p class="text-xs text-muted-foreground">total sessions</p>
+  </a>
+</div>

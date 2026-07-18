@@ -19,7 +19,7 @@ class Settings(BaseSettings):
     database_url: str = "postgresql+psycopg2://aureo:aureo@localhost:5432/aureo"
     jwt_secret: str = "dev-secret-change-in-production"
     jwt_algorithm: str = "HS256"
-    access_token_expire_minutes: int = 60
+    access_token_expire_minutes: int = 60 * 24 * 7  # 7 days
     cors_origins: str = "http://localhost:4200,http://localhost:8000"
     seed_on_startup: bool = True
 

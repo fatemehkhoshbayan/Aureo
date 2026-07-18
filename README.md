@@ -68,10 +68,13 @@ alembic upgrade head
 | POST | `/auth/register` | public |
 | POST | `/auth/login` | public (form: `username`=email, `password`) |
 | GET | `/users/me` | authenticated |
+| PATCH | `/users/me` | authenticated (profile: name, email, phone, location, avatar, email notifications) |
+| POST | `/users/me/avatar` | authenticated (multipart image upload, max 2 MB) |
 | GET | `/users` | admin |
 | GET | `/users/{id}` | admin or self |
 | GET | `/bookings` | authenticated (own; admin sees all). `?status=` |
 | GET | `/bookings/{id}` | owner or admin |
+| PATCH | `/bookings/{id}/cancel` | owner or admin (upcoming only) |
 
 ### Demo users (seeded)
 
@@ -137,7 +140,18 @@ Free Render web services **spin down** after idle; the first request can take ~3
 
 ## Frontend
 
-Angular app under `frontend/`. Photographers and categories load from the API.
+Angular app under `frontend/`. See [`frontend/README.md`](frontend/README.md) for structure, routes, and feature details.
+
+**Pages**
+
+| Path | Description |
+|------|-------------|
+| `/` | Browse & filter photographers |
+| `/photographer/:id` | Photographer profile, portfolio, packages |
+| `/my-bookings` | Booking stats, upcoming/past list, cancel, favorites |
+| `/my-profile` | Login, edit profile/avatar, theme & email preferences |
+
+Photographers, categories, auth, bookings, and profile updates load from the API. Favorites are stored client-side.
 
 Set the backend URL in [`frontend/src/environment.ts`](frontend/src/environment.ts):
 
@@ -145,6 +159,17 @@ Set the backend URL in [`frontend/src/environment.ts`](frontend/src/environment.
 apiBase: '/api'                               // Docker Compose (nginx → backend)
 // apiBase: 'http://localhost:8000'           // ng serve talking to local API
 // apiBase: 'https://YOUR-SERVICE.onrender.com' // Vercel → Render
+```
+
+### Makefile helpers
+
+From the repo root (Docker stack running):
+
+```bash
+make up        # start stack
+make migrate   # alembic upgrade head
+make seed      # re-seed demo data
+make fmt       # prettier on frontend
 ```
 
 ### Deploy on Vercel

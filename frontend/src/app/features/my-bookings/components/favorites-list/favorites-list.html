@@ -1,0 +1,28 @@
+@if (photographers().length === 0) {
+  <div class="text-center py-20">
+    <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 bg-secondary">
+      <span class="icon-[lucide--heart] text-primary text-2xl"></span>
+    </div>
+    <p class="font-bold text-foreground mb-1">No favorites yet</p>
+    <p class="text-sm text-muted-foreground mb-6">
+      Tap the heart on a photographer card to save them here.
+    </p>
+    <a
+      routerLink="/"
+      class="inline-flex px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-primary hover:opacity-90 transition-opacity"
+    >
+      Browse photographers
+    </a>
+  </div>
+} @else {
+  <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+    @for (photographer of photographers(); track photographer.id) {
+      <app-photographer-card
+        [photographer]="photographer"
+        [liked]="likedIds().has(photographer.id)"
+        (likeToggled)="toggleLike(photographer.id)"
+        (viewed)="onView($event)"
+      />
+    }
+  </div>
+}

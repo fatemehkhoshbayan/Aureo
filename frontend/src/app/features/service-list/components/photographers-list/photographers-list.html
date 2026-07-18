@@ -46,8 +46,8 @@
           @for (photographer of filtered(); track photographer.id) {
             <app-photographer-card
               [photographer]="photographer"
-              [liked]="liked().has(photographer.id)"
-              (liked_)="toggleLike(photographer.id)"
+              [liked]="likedIds().has(photographer.id)"
+              (likeToggled)="toggleLike(photographer.id)"
               (viewed)="onView(photographer.id)"
             />
           }
