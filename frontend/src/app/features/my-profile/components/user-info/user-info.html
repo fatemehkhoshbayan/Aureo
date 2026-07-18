@@ -1,0 +1,68 @@
+<div class="bg-card rounded-3xl gap-8 flex flex-col shadow-md p-7">
+  <div class="flex items-start gap-5">
+    <div
+      class="w-25 h-25 rounded-2xl overflow-hidden flex items-center justify-center text-white text-2xl font-black shrink-0 shadow-lg bg-linear-to-br from-primary to-chart-3"
+    >
+      @if (avatarUrl()) {
+        <img [src]="avatarUrl()" [alt]="profile().name" class="w-full h-full object-cover" />
+      } @else {
+        {{ initials() }}
+      }
+    </div>
+    <div class="flex-1 min-w-0 gap-1.5 flex flex-col">
+      <h2 class="text-xl font-black text-foreground">{{ profile().name }}</h2>
+      <p class="text-sm text-muted-foreground mt-0.5">{{ profile().email }}</p>
+      <div class="flex items-center gap-1.5 mt-1 text-sm text-muted-foreground">
+        <span class="icon-[lucide--map-pin] text-accent text-[11px]"></span>
+        {{ profile().location ? profile().location : 'N/A' }}
+      </div>
+    </div>
+    <button
+      type="button"
+      (click)="editing() ? cancelEdit() : startEdit()"
+      class="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold border border-primary text-foreground hover:border-primary/40 transition-colors"
+    >
+      <span class="icon-[lucide--pencil] text-sm"></span>
+      {{ editing() ? 'Cancel' : 'Edit' }}
+    </button>
+  </div>
+
+  @if (editing()) {
+    <app-profile-edit-form
+      [profile]="profile()"
+      (saved)="saveProfile($event)"
+      (cancelled)="cancelEdit()"
+    />
+    @if (saveError()) {
+      <p class="text-sm text-destructive">{{ saveError() }}</p>
+    }
+  } @else {
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div class="bg-muted rounded-xl p-4 gap-2 flex flex-col">
+        <div class="flex items-center gap-1.5 text-sm text-muted-foreground mb-1">
+          <span class="icon-[lucide--mail] text-accent text-sm"></span>
+          Email
+        </div>
+        <p class="text-sm font-semibold text-foreground truncate">{{ profile().email }}</p>
+      </div>
+      <div class="bg-muted rounded-xl p-4 gap-2 flex flex-col">
+        <div class="flex items-center gap-1.5 text-sm text-muted-foreground mb-1">
+          <span class="icon-[lucide--phone] text-accent text-sm"></span>
+          Phone
+        </div>
+        <p class="text-sm font-semibold text-foreground truncate">
+          {{ profile().phone ? profile().phone : 'N/A' }}
+        </p>
+      </div>
+      <div class="bg-muted rounded-xl p-4 gap-2 flex flex-col">
+        <div class="flex items-center gap-1.5 text-sm text-muted-foreground mb-1">
+          <span class="icon-[lucide--map-pin] text-accent text-sm"></span>
+          Location
+        </div>
+        <p class="text-sm font-semibold text-foreground truncate">
+          {{ profile().location ? profile().location : 'N/A' }}
+        </p>
+      </div>
+    </div>
+  }
+</div>
