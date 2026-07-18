@@ -1,6 +1,8 @@
-import { Component, signal } from '@angular/core';
+import { ThemeService } from '@/services';
+import { Component, inject, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { NAV_LINKS } from './constants';
+
 @Component({
   selector: 'app-header',
   host: {
@@ -10,9 +12,10 @@ import { NAV_LINKS } from './constants';
   templateUrl: './header.html',
 })
 export class Header {
+  private readonly theme = inject(ThemeService);
   protected readonly NAV_LINKS = NAV_LINKS;
+  protected readonly darkMode = this.theme.darkMode;
   mobileMenuOpen = signal(false);
-  darkMode = signal(false);
 
   toggleMobileMenu() {
     this.mobileMenuOpen.update((open) => !open);
@@ -23,11 +26,6 @@ export class Header {
   }
 
   toggleDarkMode() {
-    this.darkMode.update((dark) => !dark);
-    if (this.darkMode()) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
+    this.theme.toggle();
   }
 }

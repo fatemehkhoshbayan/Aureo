@@ -1,4 +1,4 @@
-import { Photographer, PhotographersService } from '@/services';
+import { FavoritesService, Photographer, PhotographersService } from '@/services';
 import { SkeletonCard } from '@/shared';
 import { Component, computed, inject, input, output, signal } from '@angular/core';
 import { CategoryFilter } from '../category-filter/category-filter';
@@ -16,16 +16,17 @@ type SortOption = (typeof SORT_OPTIONS)[number]['value'];
 })
 export class PhotographersList {
   private readonly photographersService = inject(PhotographersService);
+  private readonly favorites = inject(FavoritesService);
 
   protected readonly SPECIALTIES = SPECIALTIES;
   protected readonly PRICE_OPTIONS = PRICE_OPTIONS;
+  protected readonly likedIds = this.favorites.ids;
 
   photographers = input.required<Photographer[]>();
   viewed = output<string>();
 
   sortBy = signal<SortOption>('rating');
   loading = this.photographersService.loading;
-  liked = signal<Set<string | number>>(new Set());
   categoryFilter = signal('All');
   photographerFilter = signal('All');
   priceFilter = signal('All');
@@ -77,12 +78,8 @@ export class PhotographersList {
     }
   }
 
-  toggleLike(id: string | number) {
-    this.liked.update((set) => {
-      const next = new Set(set);
-      next.has(id) ? next.delete(id) : next.add(id);
-      return next;
-    });
+  toggleLike(id: string) {
+    this.favorites.toggle(id);
   }
 
   clearAllFilters() {

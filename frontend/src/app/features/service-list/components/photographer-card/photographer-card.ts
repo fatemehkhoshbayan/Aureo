@@ -12,12 +12,12 @@ export class PhotographerCard {
   protected readonly formatPrice = formatPrice;
   photographer = input.required<Photographer>();
   liked = input.required<boolean>();
-  liked_ = output<void>();
+  likeToggled = output<void>();
   viewed = output<string>();
 
   onLike(event: Event) {
     event.stopPropagation();
-    this.liked_.emit();
+    this.likeToggled.emit();
   }
 
   onView() {
