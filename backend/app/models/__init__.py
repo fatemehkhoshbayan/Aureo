@@ -51,6 +51,9 @@ class User(Base):
         back_populates="user", uselist=False
     )
     bookings: Mapped[list["Booking"]] = relationship(back_populates="user")
+    favorites: Mapped[list["Favorite"]] = relationship(
+        back_populates="user", cascade="all, delete-orphan"
+    )
 
 
 class Category(Base):
@@ -90,6 +93,9 @@ class Photographer(Base):
         back_populates="photographer", cascade="all, delete-orphan"
     )
     bookings: Mapped[list["Booking"]] = relationship(back_populates="photographer")
+    favorited_by: Mapped[list["Favorite"]] = relationship(
+        back_populates="photographer", cascade="all, delete-orphan"
+    )
 
 
 class PortfolioItem(Base):
@@ -118,6 +124,7 @@ class Package(Base):
     duration: Mapped[str] = mapped_column(String(100), nullable=False)
     description: Mapped[str] = mapped_column(Text, nullable=False)
     includes: Mapped[list] = mapped_column(JSONB, nullable=False, default=list)
+    sample_images: Mapped[list] = mapped_column(JSONB, nullable=False, default=list)
 
     photographer: Mapped["Photographer"] = relationship(back_populates="packages")
     bookings: Mapped[list["Booking"]] = relationship(back_populates="package")
@@ -161,6 +168,8 @@ class Booking(Base):
         String(50), nullable=False, default=BookingStatus.upcoming.value
     )
     notes: Mapped[str | None] = mapped_column(Text, nullable=True)
+    # Set when the booking form email differs from the account email.
+    contact_email: Mapped[str | None] = mapped_column(String(255), nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
@@ -168,3 +177,18 @@ class Booking(Base):
     user: Mapped["User"] = relationship(back_populates="bookings")
     photographer: Mapped["Photographer"] = relationship(back_populates="bookings")
     package: Mapped["Package"] = relationship(back_populates="bookings")
+
+
+class Favorite(Base):
+    __tablename__ = "favorites"
+
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), primary_key=True)
+    photographer_id: Mapped[str] = mapped_column(
+        ForeignKey("photographers.id"), primary_key=True
+    )
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+
+    user: Mapped["User"] = relationship(back_populates="favorites")
+    photographer: Mapped["Photographer"] = relationship(back_populates="favorited_by")

@@ -19,9 +19,20 @@ class Settings(BaseSettings):
     database_url: str = "postgresql+psycopg2://aureo:aureo@localhost:5432/aureo"
     jwt_secret: str = "dev-secret-change-in-production"
     jwt_algorithm: str = "HS256"
-    access_token_expire_minutes: int = 60 * 24 * 7  # 7 days
+    access_token_expire_minutes: int = 60 * 24  # 24 hours
     cors_origins: str = "http://localhost:4200,http://localhost:8000"
     seed_on_startup: bool = True
+    # When True, create tables via SQLAlchemy on startup (local/dev convenience).
+    # Prefer Alembic (`alembic upgrade head`) for Docker/production.
+    auto_create_tables: bool = True
+
+    # Leave smtp_host empty to log emails instead of sending (local/dev default).
+    smtp_host: str = ""
+    smtp_port: int = 587
+    smtp_user: str = ""
+    smtp_password: str = ""
+    smtp_from: str = "Aureo <noreply@aureo.local>"
+    smtp_tls: bool = True
 
     @field_validator("database_url", mode="before")
     @classmethod
