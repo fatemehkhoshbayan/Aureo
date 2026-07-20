@@ -22,11 +22,20 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8000:8000"
+    env_file:
+      - .env
     environment:
       DATABASE_URL: postgresql+psycopg2://aureo:aureo@db:5432/aureo
-      JWT_SECRET: change-me-to-a-long-random-secret
       CORS_ORIGINS: http://localhost:4200,http://localhost:8000
       SEED_ON_STARTUP: "true"
+      AUTO_CREATE_TABLES: "false"
+      JWT_SECRET: ${JWT_SECRET}
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASSWORD: ${SMTP_PASSWORD:-}
+      SMTP_FROM: ${SMTP_FROM:-Aureo <noreply@aureo.local>}
+      SMTP_TLS: ${SMTP_TLS:-true}
     volumes:
       - backend_uploads:/app/uploads
     depends_on:
@@ -39,7 +48,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        PROJECT_NAME: aureo   
+        PROJECT_NAME: aureo
     ports:
       - "4200:80"
     restart: unless-stopped
