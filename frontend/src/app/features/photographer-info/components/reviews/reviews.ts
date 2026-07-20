@@ -1,5 +1,5 @@
 import { type Review } from '@/services';
-import { formatDate } from '@/utils';
+import { formatDate, mediaUrl } from '@/utils';
 import { Component, input } from '@angular/core';
 
 @Component({
@@ -10,5 +10,6 @@ import { Component, input } from '@angular/core';
 })
 export class Reviews {
   protected readonly formatDate = formatDate;
+  protected readonly mediaUrl = mediaUrl;
   reviews = input.required<Review[]>();
 }
