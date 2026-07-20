@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, computed, inject, signal } from '@angular/core';
+import { Observable, tap } from 'rxjs';
 import { environment } from '../../../environment';
 import { AuthService } from '../auth/auth.service';
 import { Photographer } from '../photographers/photographers.interfaces';
 import { PhotographersService } from '../photographers/photographers.services';
-import { ApiBooking, Booking } from './bookings.interfaces';
+import { ApiBooking, Booking, BookingCreate } from './bookings.interfaces';
 
 @Injectable({ providedIn: 'root' })
 export class BookingsService {
@@ -46,6 +47,14 @@ export class BookingsService {
     });
   }
 
+  create(payload: BookingCreate): Observable<ApiBooking> {
+    return this.http.post<ApiBooking>(`${environment.apiBase}/bookings`, payload).pipe(
+      tap((created) => {
+        this._apiBookings.update((list) => [created, ...list]);
+      }),
+    );
+  }
+
   cancel(id: string): void {
     this.http.patch<ApiBooking>(`${environment.apiBase}/bookings/${id}/cancel`, {}).subscribe({
       next: (updated) => {
@@ -58,8 +67,9 @@ export class BookingsService {
     });
   }
 
-  private toUiBooking(api: ApiBooking, photographers: Photographer[]): Booking {
-    const photographer = photographers.find((p) => p.id === api.photographerId);
+  toUiBooking(api: ApiBooking, photographers?: Photographer[]): Booking {
+    const list = photographers ?? this.photographers.photographers();
+    const photographer = list.find((p) => p.id === api.photographerId);
     const scheduled = new Date(api.scheduledAt);
     const bookedOn = new Date(api.createdAt);
 

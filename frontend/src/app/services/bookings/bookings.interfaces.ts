@@ -1,5 +1,15 @@
 export type BookingStatus = 'upcoming' | 'completed' | 'cancelled';
 
+/** Payload for POST /bookings */
+export interface BookingCreate {
+  photographerId: string;
+  packageId: string;
+  scheduledAt: string;
+  notes?: string | null;
+  /** Used for booking emails when different from the account email */
+  contactEmail?: string | null;
+}
+
 /** Shape returned by GET /bookings */
 export interface ApiBooking {
   id: string;
