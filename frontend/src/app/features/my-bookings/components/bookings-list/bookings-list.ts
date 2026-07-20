@@ -1,5 +1,5 @@
 import { Booking, BookingStatus } from '@/services';
-import { formatDate } from '@/utils';
+import { formatDate, mediaUrl } from '@/utils';
 import { Component, input, output } from '@angular/core';
 
 type BookingTab = 'upcoming' | 'past';
@@ -22,6 +22,7 @@ const STATUS_BADGES: Record<BookingStatus, StatusBadge> = {
 })
 export class BookingsList {
   protected readonly formatDate = formatDate;
+  protected readonly mediaUrl = mediaUrl;
   protected readonly statusBadges = STATUS_BADGES;
 
   bookings = input.required<Booking[]>();

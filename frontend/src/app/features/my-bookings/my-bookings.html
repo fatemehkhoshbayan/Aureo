@@ -7,41 +7,37 @@
     <p class="text-muted-foreground">Track and manage your photography sessions</p>
   </div>
 
-  @if (!isLoggedIn()) {
-    <app-not-logged-in></app-not-logged-in>
-  } @else {
-    <!-- Booking statistics -->
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-      @for (statistic of statistics(); track statistic.label) {
-        <div class="bg-card rounded-2xl shadow-md p-4">
-          <div class="flex items-center gap-2 mb-2">
-            <span [class]="statistic.icon"></span>
-            <p class="text-xs text-muted-foreground font-medium">{{ statistic.label }}</p>
-          </div>
-          <p class="text-2xl font-black text-foreground">{{ statistic.value }}</p>
+  <!-- Booking statistics -->
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+    @for (statistic of statistics(); track statistic.label) {
+      <div class="bg-card rounded-2xl shadow-md p-4">
+        <div class="flex items-center gap-2 mb-2">
+          <span [class]="statistic.icon"></span>
+          <p class="text-xs text-muted-foreground font-medium">{{ statistic.label }}</p>
         </div>
-      }
-    </div>
-
-    <!-- Tabs -->
-    <div class="flex gap-1 p-1 rounded-xl bg-muted w-fit">
-      <app-tabs [tabs]="tabItems()" [(activeTab)]="tab"></app-tabs>
-    </div>
-
-    @if (tab() === 'favorites') {
-      <app-favorites-list />
-    } @else {
-      <app-bookings-list
-        [bookings]="shown()"
-        [tab]="tab() === 'past' ? 'past' : 'upcoming'"
-        (cancel)="openCancel($event)"
-      ></app-bookings-list>
+        <p class="text-2xl font-black text-foreground">{{ statistic.value }}</p>
+      </div>
     }
+  </div>
 
-    <app-cancel-dialog
-      [target]="cancelTarget()"
-      (confirmed)="confirmCancel($event)"
-      (closed)="cancelTarget.set(null)"
-    ></app-cancel-dialog>
+  <!-- Tabs -->
+  <div class="flex gap-1 p-1 rounded-xl bg-muted w-fit">
+    <app-tabs [tabs]="tabItems()" [(activeTab)]="tab"></app-tabs>
+  </div>
+
+  @if (tab() === 'favorites') {
+    <app-favorites-list />
+  } @else {
+    <app-bookings-list
+      [bookings]="shown()"
+      [tab]="tab() === 'past' ? 'past' : 'upcoming'"
+      (cancel)="openCancel($event)"
+    ></app-bookings-list>
   }
+
+  <app-cancel-dialog
+    [target]="cancelTarget()"
+    (confirmed)="confirmCancel($event)"
+    (closed)="cancelTarget.set(null)"
+  ></app-cancel-dialog>
 </section>

@@ -1,25 +1,21 @@
 import { Statistics } from '@/features/interfaces';
-import { AuthService, Booking, BookingsService, FavoritesService } from '@/services';
+import { Booking, BookingsService, FavoritesService } from '@/services';
 import { TabItem, Tabs } from '@/shared';
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { BookingsList } from './components/bookings-list/bookings-list';
 import { CancelDialog } from './components/cancel-dialog/cancel-dialog';
 import { FavoritesList } from './components/favorites-list/favorites-list';
-import { NotLoggedIn } from './components/not-logged-in/not-logged-in';
 
 type BookingTab = 'upcoming' | 'past' | 'favorites';
 
 @Component({
   selector: 'app-my-bookings',
-  imports: [Tabs, CancelDialog, BookingsList, FavoritesList, NotLoggedIn],
+  imports: [Tabs, CancelDialog, BookingsList, FavoritesList],
   templateUrl: './my-bookings.html',
 })
 export class MyBookings {
   private readonly bookingsService = inject(BookingsService);
-  private readonly auth = inject(AuthService);
   private readonly favorites = inject(FavoritesService);
-
-  protected readonly isLoggedIn = this.auth.isLoggedIn;
 
   tab = signal<BookingTab>('upcoming');
   cancelTarget = signal<Booking | null>(null);
@@ -70,11 +66,7 @@ export class MyBookings {
   ]);
 
   constructor() {
-    effect(() => {
-      if (this.auth.isLoggedIn()) {
-        this.bookingsService.load();
-      }
-    });
+    this.bookingsService.load();
   }
 
   openCancel(id: string): void {
