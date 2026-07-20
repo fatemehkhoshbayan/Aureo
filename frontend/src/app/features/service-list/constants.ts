@@ -1,4 +1,4 @@
-import { CarouselSlide } from '../../interfaces';
+import { CarouselSlide } from '../interfaces';
 
 export const CAROUSEL_SLIDES: CarouselSlide[] = [
   {

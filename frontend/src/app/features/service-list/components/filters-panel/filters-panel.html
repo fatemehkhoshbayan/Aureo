@@ -1,0 +1,37 @@
+<div class="flex flex-col gap-6">
+  <div class="flex flex-col gap-2">
+    <p class="text-md font-bold uppercase tracking-widest text-muted-foreground">Photographers</p>
+    <div class="flex flex-col gap-2">
+      @for (photographer of filters.photographers(); track photographer) {
+        <app-pill
+          [label]="photographer"
+          [value]="photographer"
+          [current]="filters.photographerFilter()"
+          (changed)="filters.setPhotographerFilter($event)"
+        />
+      }
+    </div>
+  </div>
+  <hr class="border-primary" />
+  <div class="flex flex-col gap-3">
+    <p class="text-md font-bold uppercase tracking-widest text-muted-foreground">Price Range</p>
+    <div class="flex flex-col gap-2">
+      @for (price of PRICE_OPTIONS; track price) {
+        <app-pill
+          [label]="price"
+          [value]="price"
+          [current]="filters.priceFilter()"
+          (changed)="filters.setPriceFilter($event)"
+        />
+      }
+    </div>
+  </div>
+  <hr class="border-primary" />
+  <button
+    type="button"
+    (click)="filters.clearAll()"
+    class="px-5 py-2.5 rounded-xl text-white text-sm w-full font-semibold bg-primary hover:bg-primary/40 hover:text-primary transition-colors"
+  >
+    Clear all filters
+  </button>
+</div>

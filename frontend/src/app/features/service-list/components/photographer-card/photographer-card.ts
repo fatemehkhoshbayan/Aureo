@@ -1,6 +1,6 @@
 import { Photographer } from '@/services';
 import { StarRating } from '@/shared';
-import { formatPrice } from '@/utils';
+import { formatPrice, mediaUrl } from '@/utils';
 import { Component, input, output } from '@angular/core';
 
 @Component({
@@ -10,6 +10,7 @@ import { Component, input, output } from '@angular/core';
 })
 export class PhotographerCard {
   protected readonly formatPrice = formatPrice;
+  protected readonly mediaUrl = mediaUrl;
   photographer = input.required<Photographer>();
   liked = input.required<boolean>();
   likeToggled = output<void>();

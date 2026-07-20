@@ -11,7 +11,7 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { SORT_OPTIONS } from '../constants';
+import { SORT_OPTIONS } from '../../constants';
 
 @Component({
   selector: 'app-toolbar',
@@ -24,6 +24,7 @@ export class Toolbar<T extends string = string> {
 
   private sortDropdown = viewChild<ElementRef<HTMLElement>>('sortDropdown');
   count = input.required<number>();
+  filtersOpen = input(false);
   sortBy = model.required<T>();
   filtersToggle = output<void>();
   sortOpen = signal(false);

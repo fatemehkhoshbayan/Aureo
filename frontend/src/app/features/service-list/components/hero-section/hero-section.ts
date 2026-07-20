@@ -1,7 +1,7 @@
 import { Component, model, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { interval } from 'rxjs';
-import { CAROUSEL_SLIDES } from '../constants';
+import { CAROUSEL_SLIDES } from '../../constants';
 
 @Component({
   selector: 'app-hero-section',
