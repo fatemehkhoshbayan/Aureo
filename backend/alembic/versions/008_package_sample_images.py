@@ -11,6 +11,8 @@ from alembic import op
 import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
+from app.migration_utils import has_column
+
 revision: str = "008_package_sample_images"
 down_revision: Union[str, None] = "007_favorites"
 branch_labels: Union[str, Sequence[str], None] = None
@@ -18,15 +20,18 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    op.add_column(
-        "packages",
-        sa.Column(
-            "sample_images",
-            postgresql.JSONB(astext_type=sa.Text()),
-            nullable=False,
-            server_default=sa.text("'[]'::jsonb"),
-        ),
-    )
+    bind = op.get_bind()
+
+    if not has_column(bind, "packages", "sample_images"):
+        op.add_column(
+            "packages",
+            sa.Column(
+                "sample_images",
+                postgresql.JSONB(astext_type=sa.Text()),
+                nullable=False,
+                server_default=sa.text("'[]'::jsonb"),
+            ),
+        )
 
 
 def downgrade() -> None:

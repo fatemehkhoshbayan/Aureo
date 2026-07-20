@@ -22,9 +22,12 @@ class Settings(BaseSettings):
     access_token_expire_minutes: int = 60 * 24  # 24 hours
     cors_origins: str = "http://localhost:4200,http://localhost:8000"
     seed_on_startup: bool = True
-    # When True, create tables via SQLAlchemy on startup (local/dev convenience).
-    # Prefer Alembic (`alembic upgrade head`) for Docker/production.
-    auto_create_tables: bool = True
+    # When True, create tables via SQLAlchemy on startup (local/dev convenience
+    # for running the backend bare, e.g. `uvicorn main:app`, without Docker).
+    # Defaults to False so Alembic (`alembic upgrade head`) is always the sole
+    # source of schema truth in Docker/production — set to "true" via env var
+    # for a quick local start without running migrations yourself.
+    auto_create_tables: bool = False
 
     # Leave smtp_host empty to log emails instead of sending (local/dev default).
     smtp_host: str = ""
