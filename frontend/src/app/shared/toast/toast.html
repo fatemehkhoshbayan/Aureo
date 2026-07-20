@@ -1,0 +1,37 @@
+<div
+  class="fixed top-20 right-4 z-[var(--z-toast)] flex flex-col gap-2 w-[min(100%-2rem,25rem)] pointer-events-none"
+  aria-live="polite"
+>
+  @for (toast of toasts(); track toast.id) {
+    <div
+      class="flex justify-center items-center gap-3 rounded-xl px-4 py-3 shadow-lg"
+      [class]="
+        toast.type === 'success'
+          ? 'bg-secondary/40 text-secondary-dark border border-secondary-dark'
+          : 'bg-destructive/40 text-destructive border border-destructive'
+      "
+      role="status"
+    >
+      <span
+        class="shrink-0 text-xl"
+        [class]="
+          toast.type === 'success'
+            ? 'icon-[lucide--circle-check] text-secondary-dark'
+            : 'icon-[lucide--circle-alert] text-destructive'
+        "
+      ></span>
+      <p class="flex-1 text-md text-foreground">{{ toast.message }}</p>
+      <button
+        type="button"
+        (click)="dismiss(toast.id)"
+        class="shrink-0 text-muted-foreground flex justify-center items-center hover:text-foreground transition-colors"
+        aria-label="Dismiss notification"
+      >
+        <span
+          class="icon-[lucide--x] text-xl"
+          [class]="toast.type === 'success' ? 'text-secondary-dark' : 'text-destructive'"
+        ></span>
+      </button>
+    </div>
+  }
+</div>
