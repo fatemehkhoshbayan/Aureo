@@ -1,13 +1,14 @@
 import { AuthService, BookingsService } from '@/services';
-import { Component, effect, inject } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { ProfileLogInForm } from './components/log-in-form/log-in-form';
 import { ProfilePreferences } from './components/preferences/preferences';
-import { ProfileUserInfo } from './components/user-info/user-info';
 import { QuickLinks } from './components/quick-links/quick-links';
+import { ProfileSignUpForm } from './components/sign-up-form/sign-up-form';
+import { ProfileUserInfo } from './components/user-info/user-info';
 
 @Component({
   selector: 'app-my-profile',
-  imports: [ProfileLogInForm, ProfileUserInfo, ProfilePreferences, QuickLinks],
+  imports: [ProfileLogInForm, ProfileSignUpForm, ProfileUserInfo, ProfilePreferences, QuickLinks],
   templateUrl: './my-profile.html',
 })
 export class MyProfile {
@@ -19,6 +20,7 @@ export class MyProfile {
   protected readonly userLoading = this.auth.userLoading;
   protected readonly userError = this.auth.userError;
   protected readonly bookings = this.bookingsService.bookings;
+  protected readonly authMode = signal<'login' | 'signup'>('login');
 
   constructor() {
     effect(() => {

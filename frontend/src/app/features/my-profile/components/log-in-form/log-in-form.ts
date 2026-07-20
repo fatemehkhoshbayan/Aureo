@@ -1,11 +1,11 @@
 import { AuthService } from '@/services';
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, output, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-profile-log-in-form',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './log-in-form.html',
 })
 export class ProfileLogInForm {
@@ -13,6 +13,8 @@ export class ProfileLogInForm {
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+
+  readonly switchToSignUp = output<void>();
 
   protected readonly submitting = signal(false);
   protected readonly loginError = signal<string | null>(null);
@@ -33,10 +35,14 @@ export class ProfileLogInForm {
     this.loginError.set(null);
 
     this.auth.login(email, password).subscribe({
-      next: () => {
+      next: (user) => {
         this.submitting.set(false);
-        const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/my-profile';
-        void this.router.navigateByUrl(returnUrl);
+        const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+        const fallback =
+          user.role === 'photographer' || user.role === 'admin'
+            ? '/photographer/dashboard'
+            : '/my-profile';
+        void this.router.navigateByUrl(returnUrl || fallback);
       },
       error: () => {
         this.submitting.set(false);
