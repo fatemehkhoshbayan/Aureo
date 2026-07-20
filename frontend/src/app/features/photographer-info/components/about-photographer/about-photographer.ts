@@ -1,5 +1,6 @@
 import { Photographer } from '@/services';
 import { StarRating } from '@/shared';
+import { mediaUrl } from '@/utils';
 import { Component, computed, input } from '@angular/core';
 import { PortfolioGallery } from '../portfolio-gallery/portfolio-gallery';
 import { Reviews } from '../reviews/reviews';
@@ -11,6 +12,7 @@ import { Reviews } from '../reviews/reviews';
   host: { class: 'contents' },
 })
 export class AboutPhotographer {
+  protected readonly mediaUrl = mediaUrl;
   photographer = input.required<Photographer>();
 
   portfolioCategories = computed(() => [

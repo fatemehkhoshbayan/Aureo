@@ -4,44 +4,57 @@
     <h2 class="text-xl font-bold text-foreground font-outfit">Portfolio</h2>
   </div>
 
-  <div class="flex flex-wrap gap-2 mb-4">
-    @for (cat of portfolioCategories(); track cat) {
-      <button
-        type="button"
-        (click)="setPortfolioFilter(cat)"
-        class="px-3 py-1.5 rounded-full text-sm font-semibold transition-all"
-        [class]="
-          portfolioFilter() === cat
-            ? 'text-white bg-accent'
-            : 'bg-muted text-muted-foreground hover:bg-muted/70'
-        "
-      >
-        {{ cat }}
-      </button>
-    }
-  </div>
-
-  <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-    @for (item of filteredPortfolio(); track item.id; let idx = $index) {
-      <div
-        class="rounded-2xl 1/1 overflow-hidden bg-muted hover:opacity-95 transition-opacity cursor-pointer"
-        [class.col-span-2]="idx === 0"
-        [class.row-span-2]="idx === 0"
-      >
-        <img
-          [src]="
-            'https://images.unsplash.com/' +
-            item.image +
-            '?w=' +
-            (idx === 0 ? 800 : 400) +
-            '&h=' +
-            (idx === 0 ? 450 : 400) +
-            '&fit=crop&auto=format'
+  @if (portfolioItems().length === 0) {
+    <div
+      class="flex flex-col items-center justify-center text-center rounded-2xl bg-card border border-border p-10 gap-3"
+    >
+      <span class="icon-[lucide--images] text-3xl text-muted-foreground"></span>
+      <p class="text-sm font-semibold text-foreground">No portfolio photos yet</p>
+      <p class="text-xs text-muted-foreground max-w-xs">
+        This photographer hasn’t uploaded sample work to their portfolio.
+      </p>
+    </div>
+  } @else {
+    <div class="flex flex-wrap gap-2 mb-4">
+      @for (cat of portfolioCategories(); track cat) {
+        <button
+          type="button"
+          (click)="setPortfolioFilter(cat)"
+          class="px-3 py-1.5 rounded-full text-sm font-semibold transition-all"
+          [class]="
+            portfolioFilter() === cat
+              ? 'text-white bg-accent'
+              : 'bg-muted text-muted-foreground hover:bg-muted/70'
           "
-          [alt]="item.alt"
-          class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-        />
-      </div>
-    }
-  </div>
+        >
+          {{ cat }}
+        </button>
+      }
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+      @for (item of filteredPortfolio(); track item.id; let idx = $index) {
+        <div
+          class="relative rounded-2xl aspect-square overflow-hidden bg-muted hover:opacity-95 transition-opacity cursor-pointer"
+          [class.col-span-2]="idx === 0"
+          [class.row-span-2]="idx === 0"
+          [class.aspect-auto]="idx === 0"
+          [class.min-h-64]="idx === 0"
+        >
+          <img
+            [src]="itemSrc(item, idx)"
+            [alt]="item.alt"
+            class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+          />
+          @if (item.category) {
+            <p
+              class="absolute bottom-0 inset-x-0 bg-black/55 text-white text-xs font-semibold px-2.5 py-1.5 truncate"
+            >
+              {{ item.category }}
+            </p>
+          }
+        </div>
+      }
+    </div>
+  }
 </div>

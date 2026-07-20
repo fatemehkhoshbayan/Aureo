@@ -47,6 +47,14 @@
   --sidebar-ring: #934761;
   --yellow: #f59e0b;
   --gray: #d1d5db;
+
+  /* Overlay stacking — use z-[var(--z-*)] instead of ad-hoc numbers */
+  --z-dropdown: 20;
+  --z-header: 30;
+  --z-header-menu: 40;
+  --z-filters-drawer: 50;
+  --z-modal: 60;
+  --z-toast: 70;
 }
 
 .dark {

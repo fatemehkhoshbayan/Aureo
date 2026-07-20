@@ -1,0 +1,71 @@
+<div class="max-w-3xl mx-auto px-4 sm:px-6 py-8">
+  @if (photographersLoading() && !photographer()) {
+    <div class="flex items-center justify-center py-20 text-muted-foreground gap-2">
+      <span class="icon-[lucide--loader-circle] text-xl animate-spin"></span>
+      Loading photographer…
+    </div>
+  } @else if (!photographer()) {
+    <section class="text-center py-16 space-y-4">
+      <p class="text-lg font-bold text-foreground">Photographer not found</p>
+      <button
+        type="button"
+        (click)="goBack()"
+        class="px-5 py-2.5 rounded-xl text-white text-sm font-semibold bg-primary"
+      >
+        Back to services
+      </button>
+    </section>
+  } @else {
+    @let photographerInfo = photographer()!;
+
+    <button
+      type="button"
+      (click)="goBack()"
+      class="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-6"
+    >
+      <span class="icon-[lucide--chevron-left] text-lg"></span>
+      Back to Profile
+    </button>
+
+    <!-- Step bar -->
+    <app-form-step-bar [step]="step()"></app-form-step-bar>
+
+    <!-- Photographer mini-header -->
+    <app-photographer-info [photographer]="photographerInfo"></app-photographer-info>
+
+    <!-- Step 1 -->
+    @if (step() === 1) {
+      <app-step-one
+        [photographer]="photographerInfo"
+        [(selectedPkgId)]="selectedPkgId"
+        [selectedPackage]="selectedPackage()"
+        [(date)]="date"
+        [(time)]="time"
+        [minDate]="minDate"
+        (continueClicked)="continueToDetails()"
+      />
+    }
+
+    <!-- Step 2 -->
+    @if (step() === 2) {
+      <app-step-two
+        [detailsForm]="detailsForm"
+        [selectedPackage]="selectedPackage()"
+        [date]="date()"
+        [time]="time()"
+        [submitting]="submitting()"
+        (backClicked)="backToPackage()"
+        (confirmClicked)="confirmBooking()"
+      />
+    }
+
+    <!-- Step 3 -->
+    @if (step() === 3 && confirmed(); as booking) {
+      <app-step-three
+        [booking]="booking"
+        [photographer]="photographerInfo"
+        [detailsForm]="detailsForm"
+      />
+    }
+  }
+</div>

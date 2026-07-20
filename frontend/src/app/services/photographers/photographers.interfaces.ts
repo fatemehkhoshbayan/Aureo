@@ -5,13 +5,14 @@ export interface PortfolioItem {
   alt: string;
 }
 
-interface Package {
+export interface Package {
   id: string;
   name: string;
   price: number;
   duration: string;
   description: string;
   includes: string[];
+  sampleImages: string[];
 }
 
 export interface Review {
@@ -40,4 +41,42 @@ export interface Photographer {
   packages: Package[];
   reviews: Review[];
   featured: boolean;
+}
+
+export interface PhotographerCreateSelf {
+  name: string;
+  avatar?: string;
+  cover?: string;
+  specialties: string[];
+  bio: string;
+  experience: number;
+  location: string;
+  startingPrice: number;
+}
+
+export interface PhotographerUpdateSelf {
+  name?: string;
+  avatar?: string;
+  cover?: string;
+  specialties?: string[];
+  bio?: string;
+  experience?: number;
+  location?: string;
+  startingPrice?: number;
+}
+
+export interface PackageCreateSelf {
+  name: string;
+  price: number;
+  duration: string;
+  description: string;
+  includes: string[];
+}
+
+export interface PackageUpdateSelf {
+  name?: string;
+  price?: number;
+  duration?: string;
+  description?: string;
+  includes?: string[];
 }

@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, EmailStr, Field
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, AliasChoices
 
 
 # --- Auth / Users ---
@@ -77,7 +77,7 @@ class PortfolioItemOut(BaseModel):
 
 
 class PackageOut(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(from_attributes=True, populate_by_name=True)
 
     id: str
     name: str
@@ -85,6 +85,11 @@ class PackageOut(BaseModel):
     duration: str
     description: str
     includes: list[str]
+    sampleImages: list[str] = Field(
+        default_factory=list,
+        validation_alias=AliasChoices("sample_images", "sampleImages"),
+        serialization_alias="sampleImages",
+    )
 
 
 class ReviewOut(BaseModel):
@@ -113,6 +118,11 @@ class PackageCreate(BaseModel):
     duration: str
     description: str
     includes: list[str]
+    sampleImages: list[str] = Field(
+        default_factory=list,
+        validation_alias=AliasChoices("sample_images", "sampleImages"),
+        serialization_alias="sampleImages",
+    )
 
 
 class ReviewCreate(BaseModel):
@@ -163,6 +173,17 @@ class PhotographerCreate(BaseModel):
     reviews: list[ReviewCreate] = []
 
 
+class PhotographerCreateSelf(BaseModel):
+    name: str = Field(min_length=1)
+    avatar: str = ""
+    cover: str = ""
+    specialties: list[str] = []
+    bio: str = ""
+    experience: int = Field(default=0, ge=0)
+    location: str = ""
+    startingPrice: int = Field(default=0, ge=0)
+
+
 class PhotographerUpdate(BaseModel):
     name: str | None = None
     avatar: str | None = None
@@ -177,9 +198,33 @@ class PhotographerUpdate(BaseModel):
     featured: bool | None = None
 
 
+class PackageCreateSelf(BaseModel):
+    name: str = Field(min_length=1)
+    price: int = Field(ge=0)
+    duration: str = Field(min_length=1)
+    description: str = ""
+    includes: list[str] = []
+
+
+class PackageUpdate(BaseModel):
+    name: str | None = Field(default=None, min_length=1)
+    price: int | None = Field(default=None, ge=0)
+    duration: str | None = Field(default=None, min_length=1)
+    description: str | None = None
+    includes: list[str] | None = None
+
+
 # --- Bookings ---
 
 BookingStatus = Literal["completed", "upcoming", "cancelled"]
+
+
+class BookingCreate(BaseModel):
+    photographerId: str
+    packageId: str
+    scheduledAt: datetime
+    notes: str | None = None
+    contactEmail: EmailStr | None = None
 
 
 class BookingOut(BaseModel):
@@ -195,4 +240,5 @@ class BookingOut(BaseModel):
     scheduledAt: datetime = Field(validation_alias="scheduled_at")
     status: BookingStatus
     notes: str | None = None
+    contactEmail: str | None = Field(default=None, validation_alias="contact_email")
     createdAt: datetime = Field(validation_alias="created_at")

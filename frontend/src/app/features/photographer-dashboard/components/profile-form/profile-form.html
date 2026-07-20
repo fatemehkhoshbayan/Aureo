@@ -1,0 +1,125 @@
+<section class="bg-card rounded-3xl shadow-md p-6 sm:p-8 flex flex-col gap-6">
+  <div class="flex flex-col gap-1">
+    <h2 class="text-xl font-bold text-foreground">
+      {{ isCreate() ? 'Create your public profile' : 'Your public profile' }}
+    </h2>
+    <p class="text-sm text-muted-foreground">
+      {{
+        isCreate()
+          ? 'Set up the listing customers will see when browsing Aureo.'
+          : 'Update how your listing appears to customers.'
+      }}
+    </p>
+  </div>
+
+  <form class="flex flex-col gap-5" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+      <label class="flex flex-col gap-1.5 text-sm">
+        <span class="font-semibold text-foreground">Display name</span>
+        <input
+          type="text"
+          formControlName="name"
+          class="w-full rounded-xl border border-border bg-input-background px-4 py-3 text-foreground outline-none focus:ring-2 focus:ring-primary/40"
+          placeholder="Your studio or name"
+        />
+      </label>
+
+      <label class="flex flex-col gap-1.5 text-sm">
+        <span class="font-semibold text-foreground">Location</span>
+        <input
+          type="text"
+          formControlName="location"
+          class="w-full rounded-xl border border-border bg-input-background px-4 py-3 text-foreground outline-none focus:ring-2 focus:ring-primary/40"
+          placeholder="Toronto, ON"
+        />
+      </label>
+
+      <label class="flex flex-col gap-1.5 text-sm">
+        <span class="font-semibold text-foreground">Years of experience</span>
+        <input
+          type="number"
+          min="0"
+          formControlName="experience"
+          class="w-full rounded-xl border border-border bg-input-background px-4 py-3 text-foreground outline-none focus:ring-2 focus:ring-primary/40"
+        />
+      </label>
+
+      <label class="flex flex-col gap-1.5 text-sm">
+        <span class="font-semibold text-foreground">Starting price ($)</span>
+        <input
+          type="number"
+          min="0"
+          formControlName="startingPrice"
+          class="w-full rounded-xl border border-border bg-input-background px-4 py-3 text-foreground outline-none focus:ring-2 focus:ring-primary/40"
+        />
+      </label>
+    </div>
+
+    <label class="flex flex-col gap-1.5 text-sm">
+      <span class="font-semibold text-foreground">Bio</span>
+      <textarea
+        formControlName="bio"
+        rows="4"
+        class="w-full rounded-xl border border-border bg-input-background px-4 py-3 text-foreground outline-none focus:ring-2 focus:ring-primary/40 resize-y"
+        placeholder="Tell clients about your style and experience…"
+      ></textarea>
+    </label>
+
+    <div class="flex flex-col gap-2">
+      <span class="text-sm font-semibold text-foreground">Specialties</span>
+      <div class="flex flex-wrap gap-2">
+        @for (specialty of specialtyOptions; track specialty) {
+          <button
+            type="button"
+            (click)="toggleSpecialty(specialty)"
+            [class]="
+              hasSpecialty(specialty)
+                ? 'px-3 py-1.5 rounded-full text-sm font-semibold text-white bg-primary'
+                : 'px-3 py-1.5 rounded-full text-sm font-semibold border border-border text-foreground hover:border-primary/40'
+            "
+          >
+            {{ specialty }}
+          </button>
+        }
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+      <label class="flex flex-col gap-2 text-sm">
+        <span class="font-semibold text-foreground">Avatar</span>
+        @if (avatarPreview(); as preview) {
+          <img
+            [src]="preview"
+            alt="Avatar preview"
+            class="w-24 h-24 rounded-2xl object-cover border border-border"
+          />
+        }
+        <input type="file" accept="image/*" (change)="onAvatarSelected($event)" />
+      </label>
+
+      <label class="flex flex-col gap-2 text-sm">
+        <span class="font-semibold text-foreground">Cover image</span>
+        @if (coverPreview(); as preview) {
+          <img
+            [src]="preview"
+            alt="Cover preview"
+            class="w-full h-28 rounded-2xl object-cover border border-border"
+          />
+        }
+        <input type="file" accept="image/*" (change)="onCoverSelected($event)" />
+      </label>
+    </div>
+
+    @if (formError()) {
+      <p class="text-sm text-destructive">{{ formError() }}</p>
+    }
+
+    <button
+      type="submit"
+      [disabled]="submitting()"
+      class="self-start px-6 py-3 rounded-xl font-bold text-white bg-linear-to-br from-primary to-chart-3 hover:opacity-90 transition-opacity disabled:opacity-60"
+    >
+      {{ submitting() ? 'Saving…' : isCreate() ? 'Create profile' : 'Save profile' }}
+    </button>
+  </form>
+</section>

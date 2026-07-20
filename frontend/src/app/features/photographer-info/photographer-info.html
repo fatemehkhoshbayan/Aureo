@@ -7,14 +7,14 @@
     <span class="text-sm font-medium">Back to Photographers</span>
   </button>
 
-  @if (photographer(); as photographer) {
+  @if (showLoading()) {
+    <div class="flex items-center justify-center p-20 text-muted-foreground">Loading…</div>
+  } @else if (photographer(); as photographer) {
     <!-- Cover + Avatar -->
     <div class="relative rounded-3xl overflow-hidden mb-6 bg-muted h-[350px]">
       <img
-        [src]="
-          'https://images.unsplash.com/' + photographer.cover + '?w=1200&h=400&fit=crop&auto=format'
-        "
-        [alt]="photographer.cover"
+        [src]="mediaUrl(photographer.cover, { w: 1200, h: 400 })"
+        [alt]="photographer.name + ' cover'"
         class="w-full h-full object-cover"
       />
       <div class="absolute inset-0 bg-linear-to-t from-black/60 via-black/20 to-transparent"></div>

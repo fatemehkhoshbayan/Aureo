@@ -33,6 +33,7 @@ src/app/
 │   │   │   ├── reviews/               # Client reviews list
 │   │   │   └── cta-packages/          # Pricing packages & booking CTA
 │   │   └── photographer-info.ts       # Page component — load by route id
+│   ├── booking-form/              # 3-step booking flow (package → details → confirmed)
 │   ├── my-bookings/               # User bookings & favorites
 │   │   ├── components/
 │   │   │   ├── bookings-list/         # Upcoming / past booking cards
@@ -55,19 +56,21 @@ src/app/
 │   ├── photographers/             # PhotographersService + Photographer types
 │   ├── categories/                # CategoriesService
 │   ├── auth/                      # AuthService, interceptor, user types
-│   ├── bookings/                  # BookingsService + Booking types
+│   ├── bookings/                  # BookingsService + Booking types (load / create / cancel)
 │   ├── favorites/                 # Local favorites (liked photographers)
-│   └── theme/                     # Dark / light theme persistence
+│   ├── theme/                     # Dark / light theme persistence
+│   └── toast/                     # ToastService (success / error notifications)
 ├── layout/
 │   ├── header/                    # Nav, mobile menu, dark mode toggle
 │   ├── footer/                    # Site footer
-│   └── main-layout/               # Shell wrapping header + router-outlet + footer
+│   └── main-layout/               # Shell wrapping header + router-outlet + footer + toast host
 ├── shared/
 │   ├── pill/                      # Reusable pill / tag component
 │   ├── skeleton-card/             # Loading placeholder for cards
 │   ├── star-rating/               # Star rating display
 │   ├── tabs/                      # Tab switcher
-│   └── confirm-modal/             # Reusable confirmation dialog
+│   ├── confirm-modal/             # Reusable confirmation dialog
+│   └── toast/                     # Global toast host (reads ToastService)
 ├── utils.ts                       # formatPrice, formatDate helpers
 ├── app.routes.ts
 └── app.ts
@@ -76,16 +79,19 @@ public/                            # Static assets (logos, favicon)
 
 ## Routes
 
-| Path                | Component        | Status      |
-| ------------------- | ---------------- | ----------- |
-| `/`                 | ServicesList     | Implemented |
-| `/photographer/:id` | PhotographerInfo | Implemented |
-| `/my-bookings`      | MyBookings       | Implemented |
-| `/my-profile`       | MyProfile        | Implemented |
-| `/privacy`          | —                | Planned     |
-| `/terms`            | —                | Planned     |
-| `/contact`          | —                | Planned     |
-| `/**`               | Not Found        | Implemented |
+| Path                      | Component             | Status      |
+| ------------------------- | --------------------- | ----------- |
+| `/`                       | ServicesList          | Implemented |
+| `/photographer/dashboard` | PhotographerDashboard | Implemented |
+| `/photographer/:id`       | PhotographerInfo      | Implemented |
+| `/book/:id`               | BookingForm           | Implemented |
+| `/my-bookings`            | MyBookings            | Implemented |
+| `/my-profile`             | MyProfile             | Implemented |
+| `/become-a-photographer`  | BecomePhotographer    | Implemented |
+| `/privacy`                | —                     | Planned     |
+| `/terms`                  | —                     | Planned     |
+| `/contact`                | —                     | Planned     |
+| `/**`                     | Not Found             | Implemented |
 
 ## Features
 
@@ -107,9 +113,18 @@ public/                            # Static assets (logos, favicon)
 - **About** — bio and specialty tags
 - **Portfolio gallery** — sample work grid
 - **Reviews** — client ratings and comments
-- **Packages CTA** — pricing packages with booking call-to-action
+- **Packages CTA** — pricing packages; navigates to `/book/:id` (optional `?package=`)
 - **Back navigation** — return to the photographers list
 - **Not found state** — shown when the photographer id is invalid
+
+### Booking form (`/book/:id`)
+
+- **Auth gate** — prompts login with `returnUrl` when unauthenticated
+- **Step 1** — choose package (from photographer API data), date, and time slot
+- **Step 2** — contact details (prefilled from AuthService) + booking summary
+- **Step 3** — confirmation with reference and **Total** (no payment collected)
+- **API** — creates an upcoming booking via `BookingsService.create` → `POST /bookings`
+- **Toasts** — success / error feedback via shared `Toast` + `ToastService`
 
 ### My bookings (`/my-bookings`)
 
@@ -137,7 +152,8 @@ public/                            # Static assets (logos, favicon)
 
 - **AuthService** — login, logout, `loadMe`, token persistence
 - **authInterceptor** — attaches `Authorization: Bearer` to API requests
-- **BookingsService** — load and cancel user bookings
+- **BookingsService** — load, create, and cancel user bookings
+- **ToastService** — global success / error notifications (host mounted in MainLayout)
 - API base URL is set in [`src/environment.ts`](src/environment.ts)
 
 ## Getting started

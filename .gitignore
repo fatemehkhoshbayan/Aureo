@@ -5,6 +5,7 @@ frontend/.angular
 frontend/npm-debug.log*
 frontend/.env
 frontend/.env.*
+!frontend/.env.example
 
 # --- Backend (Python/FastAPI) ---
 backend/__pycache__/
@@ -14,6 +15,7 @@ backend/.venv
 backend/venv
 backend/.env
 backend/.env.*
+!backend/.env.example
 backend/.pytest_cache
 backend/uploads/
 
@@ -22,5 +24,7 @@ backend/uploads/
 .DS_Store
 Thumbs.db
 
-# --- Docker ---
+# --- Docker / secrets ---
+.env
 *.env
+!.env.example

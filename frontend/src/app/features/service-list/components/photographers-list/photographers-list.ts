@@ -1,8 +1,23 @@
-import { FavoritesService, Photographer, PhotographersService } from '@/services';
+import {
+  FavoritesService,
+  Photographer,
+  PhotographersService,
+  ServiceFiltersMenuService,
+} from '@/services';
 import { SkeletonCard } from '@/shared';
-import { Component, computed, inject, input, output, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  inject,
+  input,
+  OnDestroy,
+  output,
+  signal,
+} from '@angular/core';
+import { PRICE_OPTIONS, SORT_OPTIONS, SPECIALTIES } from '../../constants';
 import { CategoryFilter } from '../category-filter/category-filter';
-import { PRICE_OPTIONS, SORT_OPTIONS, SPECIALTIES } from '../constants';
+import { FiltersPanel } from '../filters-panel/filters-panel';
 import { PhotographerCard } from '../photographer-card/photographer-card';
 import { Sidebar } from '../sidebar/sidebar';
 import { Toolbar } from '../toolbar/toolbar';
@@ -11,12 +26,13 @@ type SortOption = (typeof SORT_OPTIONS)[number]['value'];
 
 @Component({
   selector: 'app-photographers-list',
-  imports: [Sidebar, Toolbar, SkeletonCard, PhotographerCard, CategoryFilter],
+  imports: [Sidebar, Toolbar, SkeletonCard, PhotographerCard, CategoryFilter, FiltersPanel],
   templateUrl: './photographers-list.html',
 })
-export class PhotographersList {
+export class PhotographersList implements OnDestroy {
   private readonly photographersService = inject(PhotographersService);
   private readonly favorites = inject(FavoritesService);
+  protected readonly filtersMenu = inject(ServiceFiltersMenuService);
 
   protected readonly SPECIALTIES = SPECIALTIES;
   protected readonly PRICE_OPTIONS = PRICE_OPTIONS;
@@ -27,29 +43,26 @@ export class PhotographersList {
 
   sortBy = signal<SortOption>('rating');
   loading = this.photographersService.loading;
-  categoryFilter = signal('All');
-  photographerFilter = signal('All');
-  priceFilter = signal('All');
-  showFilters = signal(false);
-
-  photographersName = computed(() => this.photographers().map((photographer) => photographer.name));
 
   filtered = computed(() => {
     let result = this.photographers();
 
-    if (this.photographerFilter() !== 'All') {
-      result = result.filter((photographer) => photographer.name === this.photographerFilter());
+    const photographerFilter = this.filtersMenu.photographerFilter();
+    if (photographerFilter !== 'All') {
+      result = result.filter((photographer) => photographer.name === photographerFilter);
     }
 
-    if (this.priceFilter() !== 'All') {
+    const priceFilter = this.filtersMenu.priceFilter();
+    if (priceFilter !== 'All') {
       result = result.filter((photographer: Photographer) =>
-        this.matchesPriceRange(photographer.startingPrice, this.priceFilter()),
+        this.matchesPriceRange(photographer.startingPrice, priceFilter),
       );
     }
 
-    if (this.categoryFilter() !== 'All') {
+    const categoryFilter = this.filtersMenu.categoryFilter();
+    if (categoryFilter !== 'All') {
       result = result.filter((photographer: Photographer) =>
-        photographer.specialties.includes(this.categoryFilter()),
+        photographer.specialties.includes(categoryFilter),
       );
     }
 
@@ -64,6 +77,18 @@ export class PhotographersList {
 
     return sorted;
   });
+
+  constructor() {
+    effect(() => {
+      this.filtersMenu.setPhotographers(
+        this.photographers().map((photographer) => photographer.name),
+      );
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.filtersMenu.reset();
+  }
 
   private matchesPriceRange(price: number, range: string): boolean {
     switch (range) {
@@ -83,25 +108,15 @@ export class PhotographersList {
   }
 
   clearAllFilters() {
-    this.photographerFilter.set('All');
-    this.categoryFilter.set('All');
-    this.priceFilter.set('All');
-  }
-
-  setPhotographerFilter(value: string) {
-    this.photographerFilter.set(value);
+    this.filtersMenu.clearAll();
   }
 
   setCategory(category: string) {
-    this.categoryFilter.set(category);
-  }
-
-  setPriceFilter(value: string) {
-    this.priceFilter.set(value);
+    this.filtersMenu.setCategoryFilter(category);
   }
 
   toggleFilters() {
-    this.showFilters.update((v) => !v);
+    this.filtersMenu.toggle();
   }
 
   onView(id: string) {

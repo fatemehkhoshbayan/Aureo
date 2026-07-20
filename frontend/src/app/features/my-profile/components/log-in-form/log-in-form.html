@@ -1,4 +1,4 @@
-<div class="w-full max-w-3xl m-auto bg-card rounded-3xl shadow-md p-8 flex flex-col gap-10">
+<section class="w-full max-w-3xl m-auto bg-card rounded-3xl shadow-md p-8 flex flex-col gap-6">
   <div class="flex flex-col items-center gap-4 text-center">
     <div class="w-16 h-16 rounded-2xl flex items-center justify-center bg-secondary/70">
       <span class="icon-[lucide--log-in] text-2xl text-secondary-dark"></span>
@@ -7,7 +7,7 @@
     <p class="text-sm text-muted-foreground">Sign in to manage your profile and bookings</p>
   </div>
 
-  <form class="flex flex-col gap-4 py-5 px-25" (ngSubmit)="onLogin()" [formGroup]="loginForm">
+  <form class="flex flex-col gap-5 py-5 px-25" (ngSubmit)="onLogin()" [formGroup]="loginForm">
     <label class="flex flex-col gap-1.5 text-sm">
       <span class="font-semibold text-foreground">Email</span>
       <input
@@ -43,9 +43,25 @@
     <button
       type="submit"
       [disabled]="submitting()"
-      class="w-full py-3 rounded-xl font-bold text-white mt-3 bg-linear-to-br from-primary to-chart-3 hover:opacity-90 transition-opacity disabled:opacity-60"
+      class="w-full py-3 rounded-xl font-bold text-white mt-5 bg-linear-to-br from-primary to-chart-3 hover:opacity-90 transition-opacity disabled:opacity-60"
     >
       {{ submitting() ? 'Signing in…' : 'Sign in' }}
     </button>
+
+    <button
+      type="button"
+      (click)="switchToSignUp.emit()"
+      class="text-sm text-muted-foreground hover:text-primary transition-colors p-2"
+    >
+      Don't have an account? <span class="font-semibold text-primary">Sign up</span>
+    </button>
+
+    <a
+      routerLink="/become-a-photographer"
+      class="text-sm text-center text-muted-foreground hover:text-primary transition-colors p-2"
+    >
+      Are you a photographer?
+      <span class="font-semibold text-primary">Join here</span>
+    </a>
   </form>
-</div>
+</section>

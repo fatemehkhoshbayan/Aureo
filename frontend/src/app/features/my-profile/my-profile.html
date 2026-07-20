@@ -17,7 +17,11 @@
   </div>
 
   @if (!isLoggedIn()) {
-    <app-profile-log-in-form />
+    @if (authMode() === 'login') {
+      <app-profile-log-in-form (switchToSignUp)="authMode.set('signup')" />
+    } @else {
+      <app-profile-sign-up-form (switchToLogin)="authMode.set('login')" />
+    }
   } @else if (user()) {
     <app-profile-user-info />
 

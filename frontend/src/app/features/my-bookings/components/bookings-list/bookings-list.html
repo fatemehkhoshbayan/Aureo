@@ -14,11 +14,7 @@
           <div class="flex items-start gap-3 flex-1 min-w-0">
             <div class="w-15 h-15 rounded-xl overflow-hidden shrink-0 bg-muted">
               <img
-                [src]="
-                  'https://images.unsplash.com/' +
-                  booking.photographerAvatar +
-                  '?w=100&h=100&fit=crop&auto=format&face'
-                "
+                [src]="mediaUrl(booking.photographerAvatar, { w: 100, h: 100, face: true })"
                 [alt]="booking.photographerName"
                 class="w-full h-full object-cover"
               />

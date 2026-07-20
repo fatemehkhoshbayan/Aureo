@@ -11,7 +11,7 @@
 
     <!-- Desktop nav -->
     <nav class="hidden lg:flex items-center gap-1">
-      @for (link of NAV_LINKS; track link.id) {
+      @for (link of navLinks(); track link.id) {
         <a
           [routerLink]="link.href"
           routerLinkActive="text-white bg-primary"
@@ -52,14 +52,13 @@
   <!-- Mobile menu panel -->
   @if (mobileMenuOpen()) {
     <div
-      class="lg:hidden z-50 border-t border-border bg-card px-4 py-3 space-y-1 absolute top-full left-0 right-0 w-full shadow-md"
+      class="lg:hidden z-[var(--z-header-menu)] border-t border-border bg-card px-4 py-3 space-y-1 absolute top-full left-0 right-0 w-full shadow-md"
     >
-      @for (link of NAV_LINKS; track link.id) {
+      @for (link of navLinks(); track link.id) {
         <a
           [routerLink]="link.href"
           routerLinkActive="text-white bg-linear-to-r from-[#934761] to-[#AD5C71]"
           [routerLinkActiveOptions]="link.href === '/' ? { exact: true } : { exact: false }"
-          [class]=""
           class="w-full flex items-center gap-2.5 px-4 py-3 rounded-xl text-sm font-semibold text-left transition-all text-primary"
           (click)="closeMobileMenu()"
         >

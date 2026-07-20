@@ -4,14 +4,14 @@
       <img src="aureo_logo_stacked.png" alt="Aureo" width="200" height="200" />
     </a>
     <p class="text-md font-bold">Photography, beautifully booked. © 2026 Aureo.</p>
-    <div class="flex items-center gap-8 text-md font-bold">
+    <div class="flex sm:flex-row flex-col items-center gap-4 sm:gap-8 text-md font-bold">
       @for (link of FOOTER_LINKS; track link.id) {
         <a
           [routerLink]="link.href"
           [routerLinkActive]="['text-white']"
           class="hover:text-white transition-colors"
-          >{{ link.label }}</a
-        >
+          >{{ link.label }}
+        </a>
       }
     </div>
   </div>

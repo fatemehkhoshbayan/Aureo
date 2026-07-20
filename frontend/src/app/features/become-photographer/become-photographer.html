@@ -1,0 +1,85 @@
+<section class="max-w-5xl mx-auto gap-10 flex flex-col px-4 sm:px-6 lg:px-8 py-15">
+  <div class="flex items-center gap-2">
+    <span class="icon-[lucide--camera] text-accent text-3xl"></span>
+    <h1 class="text-3xl font-black text-foreground font-display">Become a Photographer</h1>
+  </div>
+
+  <div class="w-full max-w-3xl m-auto bg-card rounded-3xl shadow-md p-8 flex flex-col gap-6">
+    <div class="flex flex-col items-center gap-4 text-center">
+      <div class="w-16 h-16 rounded-2xl flex items-center justify-center bg-secondary/70">
+        <span class="icon-[lucide--aperture] text-2xl text-secondary-dark"></span>
+      </div>
+      <h2 class="text-xl font-bold text-foreground">List your services on Aureo</h2>
+      <p class="text-sm text-muted-foreground">
+        Create a photographer account, build your profile, and start getting booked
+      </p>
+    </div>
+
+    <form
+      class="flex flex-col gap-5 py-5 px-4 sm:px-25"
+      (ngSubmit)="onSignUp()"
+      [formGroup]="signUpForm"
+    >
+      <label class="flex flex-col gap-1.5 text-sm">
+        <span class="font-semibold text-foreground">Full name</span>
+        <input
+          type="text"
+          formControlName="fullName"
+          autocomplete="name"
+          class="w-full rounded-xl border border-border bg-input-background px-4 py-3 text-foreground outline-none focus:ring-2 focus:ring-primary/40"
+          placeholder="Alex Rivera"
+        />
+        @if (signUpForm.controls.fullName.touched && signUpForm.controls.fullName.invalid) {
+          <span class="text-xs text-destructive">Full name is required</span>
+        }
+      </label>
+
+      <label class="flex flex-col gap-1.5 text-sm">
+        <span class="font-semibold text-foreground">Email</span>
+        <input
+          type="email"
+          formControlName="email"
+          autocomplete="email"
+          class="w-full rounded-xl border border-border bg-input-background px-4 py-3 text-foreground outline-none focus:ring-2 focus:ring-primary/40"
+          placeholder="you@example.com"
+        />
+        @if (signUpForm.controls.email.touched && signUpForm.controls.email.invalid) {
+          <span class="text-xs text-destructive">Enter a valid email address</span>
+        }
+      </label>
+
+      <label class="flex flex-col gap-1.5 text-sm">
+        <span class="font-semibold text-foreground">Password</span>
+        <input
+          type="password"
+          formControlName="password"
+          autocomplete="new-password"
+          class="w-full rounded-xl border border-border bg-input-background px-4 py-3 text-foreground outline-none focus:ring-2 focus:ring-primary/40"
+          placeholder="••••••••"
+        />
+        @if (signUpForm.controls.password.touched && signUpForm.controls.password.invalid) {
+          <span class="text-xs text-destructive">Password must be at least 6 characters</span>
+        }
+      </label>
+
+      @if (signUpError()) {
+        <p class="text-sm text-destructive">{{ signUpError() }}</p>
+      }
+
+      <button
+        type="submit"
+        [disabled]="submitting()"
+        class="w-full py-3 rounded-xl font-bold text-white mt-5 bg-linear-to-br from-primary to-chart-3 hover:opacity-90 transition-opacity disabled:opacity-60"
+      >
+        {{ submitting() ? 'Creating account…' : 'Create photographer account' }}
+      </button>
+
+      <a
+        routerLink="/my-profile"
+        class="text-sm text-center text-muted-foreground hover:text-primary transition-colors p-2"
+      >
+        Already have an account? <span class="font-semibold text-primary">Sign in</span>
+      </a>
+    </form>
+  </div>
+</section>

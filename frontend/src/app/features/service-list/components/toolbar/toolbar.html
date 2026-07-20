@@ -1,11 +1,19 @@
-<div class="flex items-center justify-between mb-5 w-full">
-  <div class="flex items-center gap-3">
+<div
+  class="flex sm:flex-row flex-col items-start sm:items-center justify-between gap-3 sm:gap-0 w-full"
+>
+  <div
+    class="flex items-center sm:justify-center justify-between sm:items-center gap-3 w-full sm:w-auto"
+  >
     <button
       type="button"
       (click)="filtersToggle.emit()"
-      class="lg:hidden flex items-center gap-2 px-3 py-2 rounded-xl border border-border bg-card text-sm font-medium"
+      class="lg:hidden w-9 h-9 rounded-xl flex items-center justify-center border border-border hover:border-primary/40 text-muted-foreground hover:text-foreground transition-all hover:bg-primary/10"
+      [attr.aria-expanded]="filtersOpen()"
+      aria-label="Toggle filters"
     >
-      <span class="icon-[lucide--filter] text-base"></span> Filters
+      <span
+        [class]="(filtersOpen() ? 'icon-[lucide--x]' : 'icon-[lucide--filter]') + ' text-xl'"
+      ></span>
     </button>
     <p class="text-md text-muted-foreground">
       <span class="font-semibold text-foreground">{{ count() }}</span> photographers
@@ -32,7 +40,7 @@
         cdkListbox
         [cdkListboxValue]="[sortBy()]"
         (cdkListboxValueChange)="selectSort($event.value[0])"
-        class="absolute right-0 z-20 top-full mt-2 min-w-full overflow-hidden rounded-xl shadow-md bg-card p-2"
+        class="absolute right-0 z-[var(--z-dropdown)] top-full mt-2 min-w-full overflow-hidden rounded-xl shadow-md bg-card p-2"
       >
         @for (option of SORT_OPTIONS; track option.value) {
           <li

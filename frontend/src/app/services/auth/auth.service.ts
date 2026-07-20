@@ -1,8 +1,8 @@
-import { environment } from '../../../environment';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { Observable, catchError, finalize, switchMap, tap, throwError } from 'rxjs';
-import { TokenResponse, User, UserUpdate } from './auth.interfaces';
+import { environment } from '../../../environment';
+import { RegisterPayload, TokenResponse, User, UserUpdate } from './auth.interfaces';
 
 const TOKEN_KEY = 'aureo_access_token';
 
@@ -40,6 +40,12 @@ export class AuthService {
         tap((res) => this.setToken(res.access_token)),
         switchMap(() => this.loadMe()),
       );
+  }
+
+  register(payload: RegisterPayload): Observable<User> {
+    return this.http
+      .post<User>(`${environment.apiBase}/auth/register`, payload)
+      .pipe(switchMap(() => this.login(payload.email, payload.password)));
   }
 
   loadMe(): Observable<User> {
