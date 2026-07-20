@@ -1,0 +1,215 @@
+<div class="bg-card rounded-3xl shadow-md p-6 sm:p-8 flex flex-col gap-6">
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <div class="flex flex-col gap-1">
+      <h2 class="text-xl font-bold text-foreground">Your services</h2>
+      <p class="text-sm text-muted-foreground">
+        Packages customers can book (price, duration, what’s included, sample work).
+      </p>
+    </div>
+    @if (!showForm()) {
+      <button
+        type="button"
+        (click)="openCreate()"
+        class="px-4 py-2.5 rounded-xl text-sm font-semibold text-white bg-primary hover:opacity-90 transition-opacity"
+      >
+        Add service
+      </button>
+    }
+  </div>
+
+  @if (showForm()) {
+    <form
+      class="flex flex-col gap-4 border border-border rounded-2xl p-5"
+      [formGroup]="form"
+      (ngSubmit)="onSubmit()"
+    >
+      <h3 class="font-semibold text-foreground">
+        {{ editingId() ? 'Edit service' : 'New service' }}
+      </h3>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <label class="flex flex-col gap-1.5 text-sm">
+          <span class="font-semibold text-foreground">Name</span>
+          <input
+            type="text"
+            formControlName="name"
+            class="w-full rounded-xl border border-border bg-input-background px-4 py-3 text-foreground outline-none focus:ring-2 focus:ring-primary/40"
+            placeholder="Portrait Session"
+          />
+        </label>
+        <label class="flex flex-col gap-1.5 text-sm">
+          <span class="font-semibold text-foreground">Duration</span>
+          <input
+            type="text"
+            formControlName="duration"
+            class="w-full rounded-xl border border-border bg-input-background px-4 py-3 text-foreground outline-none focus:ring-2 focus:ring-primary/40"
+            placeholder="2 hours"
+          />
+        </label>
+        <label class="flex flex-col gap-1.5 text-sm">
+          <span class="font-semibold text-foreground">Price ($)</span>
+          <input
+            type="number"
+            min="0"
+            formControlName="price"
+            class="w-full rounded-xl border border-border bg-input-background px-4 py-3 text-foreground outline-none focus:ring-2 focus:ring-primary/40"
+          />
+        </label>
+      </div>
+
+      <label class="flex flex-col gap-1.5 text-sm">
+        <span class="font-semibold text-foreground">Description</span>
+        <textarea
+          formControlName="description"
+          rows="3"
+          class="w-full rounded-xl border border-border bg-input-background px-4 py-3 text-foreground outline-none focus:ring-2 focus:ring-primary/40 resize-y"
+        ></textarea>
+      </label>
+
+      <label class="flex flex-col gap-1.5 text-sm">
+        <span class="font-semibold text-foreground">Includes (one per line)</span>
+        <textarea
+          [value]="includesText()"
+          (input)="onIncludesInput($event)"
+          rows="4"
+          class="w-full rounded-xl border border-border bg-input-background px-4 py-3 text-foreground outline-none focus:ring-2 focus:ring-primary/40 resize-y"
+          placeholder="Edited digital photos&#10;Online gallery&#10;Print release"
+        ></textarea>
+      </label>
+
+      <div class="flex flex-col gap-2">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <p class="text-sm font-semibold text-foreground">Sample work</p>
+          <p class="text-xs text-muted-foreground">
+            Up to {{ maxSamples }} images · {{ sampleCount() }}/{{ maxSamples }}
+          </p>
+        </div>
+        <p class="text-xs text-muted-foreground">
+          Show customers examples of work for this service (JPEG, PNG, WebP, or GIF · max 2&nbsp;MB
+          each). Changes apply when you save.
+        </p>
+
+        @if (existingSamples().length || pendingPreviews().length) {
+          <div class="grid grid-cols-3 sm:grid-cols-4 gap-2">
+            @for (image of existingSamples(); track image) {
+              <div class="relative aspect-square rounded-xl overflow-hidden border border-border">
+                <img
+                  [src]="mediaUrl(image) || image"
+                  alt="Sample work"
+                  class="w-full h-full object-cover"
+                />
+                <button
+                  type="button"
+                  (click)="removeExistingSample(image)"
+                  [disabled]="submitting()"
+                  class="absolute top-1.5 right-1.5 w-7 h-7 rounded-lg bg-card/90 text-destructive flex items-center justify-center hover:bg-card"
+                  aria-label="Remove sample image"
+                >
+                  <span class="icon-[lucide--x] text-base"></span>
+                </button>
+              </div>
+            }
+            @for (preview of pendingPreviews(); track preview; let i = $index) {
+              <div class="relative aspect-square rounded-xl overflow-hidden border border-border">
+                <img [src]="preview" alt="New sample" class="w-full h-full object-cover" />
+                <button
+                  type="button"
+                  (click)="removePendingFile(i)"
+                  [disabled]="submitting()"
+                  class="absolute top-1.5 right-1.5 w-7 h-7 rounded-lg bg-card/90 text-destructive flex items-center justify-center hover:bg-card"
+                  aria-label="Remove selected image"
+                >
+                  <span class="icon-[lucide--x] text-base"></span>
+                </button>
+              </div>
+            }
+          </div>
+        }
+
+        <label class="flex flex-col gap-1.5 text-sm w-fit">
+          <span class="font-semibold text-foreground sr-only">Add sample images</span>
+          <input
+            type="file"
+            accept="image/*"
+            multiple
+            [disabled]="submitting() || sampleCount() >= maxSamples"
+            (change)="onSamplesSelected($event)"
+            class="text-sm"
+          />
+        </label>
+      </div>
+
+      @if (formError()) {
+        <p class="text-sm text-destructive">{{ formError() }}</p>
+      }
+
+      <div class="flex flex-wrap gap-3">
+        <button
+          type="submit"
+          [disabled]="submitting()"
+          class="px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-primary hover:opacity-90 disabled:opacity-60"
+        >
+          {{ submitting() ? 'Saving…' : editingId() ? 'Save changes' : 'Add service' }}
+        </button>
+        <button
+          type="button"
+          (click)="cancelForm()"
+          class="px-5 py-2.5 rounded-xl text-sm font-semibold border border-border text-foreground hover:border-primary/40"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  }
+
+  @if (packages().length === 0) {
+    <p class="text-sm text-muted-foreground">
+      No services yet. Add your first package to start getting booked.
+    </p>
+  } @else {
+    <ul class="flex flex-col gap-3">
+      @for (pkg of packages(); track pkg.id) {
+        <li
+          class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border border-border rounded-2xl p-4"
+        >
+          <div class="flex flex-col gap-2 min-w-0">
+            <div class="flex flex-col gap-1">
+              <p class="font-semibold text-foreground">{{ pkg.name }}</p>
+              <p class="text-sm text-muted-foreground">${{ pkg.price }} · {{ pkg.duration }}</p>
+              @if (pkg.description) {
+                <p class="text-sm text-muted-foreground">{{ pkg.description }}</p>
+              }
+            </div>
+            @if (pkg.sampleImages?.length) {
+              <div class="flex gap-1.5 flex-wrap">
+                @for (image of pkg.sampleImages; track image) {
+                  <img
+                    [src]="mediaUrl(image) || image"
+                    alt=""
+                    class="w-12 h-12 rounded-lg object-cover border border-border"
+                  />
+                }
+              </div>
+            }
+          </div>
+          <div class="flex gap-2 shrink-0">
+            <button
+              type="button"
+              (click)="openEdit(pkg)"
+              class="px-3 py-2 rounded-xl text-sm font-semibold border border-border hover:border-primary/40"
+            >
+              Edit
+            </button>
+            <button
+              type="button"
+              (click)="deletePackage(pkg)"
+              class="px-3 py-2 rounded-xl text-sm font-semibold border border-destructive/30 text-destructive hover:bg-destructive/10"
+            >
+              Delete
+            </button>
+          </div>
+        </li>
+      }
+    </ul>
+  }
+</div>
