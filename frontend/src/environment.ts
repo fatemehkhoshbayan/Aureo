@@ -5,5 +5,5 @@ export const environment = {
    * - Docker Compose via nginx: `/api`
    * - Vercel + Render: `https://YOUR-SERVICE.onrender.com`
    */
-  apiBase: 'http://localhost:8000',
+  apiBase: 'https://aureo-y70j.onrender.com',
 };
