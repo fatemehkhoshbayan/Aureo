@@ -1,8 +1,11 @@
 export { BecomePhotographer } from './become-photographer/become-photographer';
 export { BookingForm } from './booking-form/booking-form';
+export { Contact } from './contact/contact';
 export { MyBookings } from './my-bookings/my-bookings';
 export { MyProfile } from './my-profile/my-profile';
 export { NotFound } from './not-found/not-found';
 export { PhotographerDashboard } from './photographer-dashboard/photographer-dashboard';
 export { PhotographerInfo } from './photographer-info/photographer-info';
+export { Privacy } from './privacy/privacy';
 export { ServicesList } from './service-list/services-list';
+export { Terms } from './terms/terms';
