@@ -99,6 +99,7 @@ This keeps `alembic upgrade head` safe to re-run against any database state — 
 | GET    | `/favorites`                       | authenticated (list of photographer ids)                                           |
 | PUT    | `/favorites/{photographer_id}`     | authenticated                                                                      |
 | DELETE | `/favorites/{photographer_id}`     | authenticated                                                                      |
+| POST   | `/contact`                         | public (rate-limited); emails the message via SMTP                                 |
 
 ### Demo users (seeded)
 
@@ -199,6 +200,9 @@ Angular app under `frontend/`. See [`frontend/README.md`](frontend/README.md) fo
 | `/my-profile`             | Login / customer sign-up, edit profile/avatar, theme & email preferences |
 | `/become-a-photographer`  | Photographer sign-up                                                     |
 | `/photographer/dashboard` | Photographer self-service: profile, services, portfolio (auth + role)    |
+| `/contact`                | Contact form — emails the Aureo inbox via `POST /contact`               |
+| `/terms`                  | Terms of Service (static)                                                |
+| `/privacy`                | Privacy Policy (static)                                                  |
 
 Photographers, categories, auth, bookings, favorites, and profile updates load from the API. Toasts use a shared host in the main layout.
 

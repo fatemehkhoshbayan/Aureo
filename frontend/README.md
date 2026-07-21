@@ -50,6 +50,9 @@ src/app/
 │   │   │   └── quick-links/           # Shortcuts to bookings
 │   │   ├── interfaces.ts              # Profile draft / save payload types
 │   │   └── my-profile.ts
+│   ├── contact/                   # Contact form page (POST /contact)
+│   ├── terms/                     # Terms of Service (static)
+│   ├── privacy/                   # Privacy Policy (static)
 │   ├── interfaces.ts              # Shared feature types (Category, Statistics, …)
 │   └── not-found/                 # 404 page
 ├── services/
@@ -58,6 +61,7 @@ src/app/
 │   ├── auth/                      # AuthService, interceptor, user types
 │   ├── bookings/                  # BookingsService + Booking types (load / create / cancel)
 │   ├── favorites/                 # Favorites (liked photographers), synced per-user via the backend API
+│   ├── contact/                   # ContactService (sends the contact form to the API)
 │   ├── theme/                     # Dark / light theme persistence
 │   └── toast/                     # ToastService (success / error notifications)
 ├── layout/
@@ -88,9 +92,9 @@ public/                            # Static assets (logos, favicon)
 | `/my-bookings`            | MyBookings            | Implemented |
 | `/my-profile`             | MyProfile             | Implemented |
 | `/become-a-photographer`  | BecomePhotographer    | Implemented |
-| `/privacy`                | —                     | Planned     |
-| `/terms`                  | —                     | Planned     |
-| `/contact`                | —                     | Planned     |
+| `/contact`                | Contact               | Implemented |
+| `/terms`                  | Terms                 | Implemented |
+| `/privacy`                | Privacy               | Implemented |
 | `/**`                     | Not Found             | Implemented |
 
 ## Features
@@ -104,7 +108,7 @@ public/                            # Static assets (logos, favicon)
 - **Sorting** — by rating, price (low → high), or price (high → low)
 - **Photographer cards** — avatar, cover, specialties, rating, starting price, like toggle; navigate to profile
 - **Favorites** — like/unlike photographers (stored via FavoritesService)
-- **Loading state** — skeleton cards while data loads
+- **Loading state** — skeleton cards, category tiles, and filter pills while data loads
 - **Responsive layout** — collapsible filter sidebar on mobile
 
 ### Photographer info (`/photographer/:id`)
@@ -143,10 +147,17 @@ public/                            # Static assets (logos, favicon)
 - **Quick links** — shortcuts to My Bookings
 - **Logout** — clear session and return to the login form
 
+### Contact / Terms / Privacy
+
+- **Contact** (`/contact`) — name + message form; submits to `POST /contact` via `ContactService`, shows a success toast and resets the form, or an inline error on failure. Also links directly to a `mailto:` address for users who prefer their own mail client.
+- **Terms** (`/terms`) — static Terms of Service content
+- **Privacy** (`/privacy`) — static Privacy Policy content
+- All three are linked from the footer and follow the same page shell as `become-a-photographer` (icon + heading, card content)
+
 ### Layout
 
 - **Header** — sticky nav with active route highlighting, mobile menu, dark mode toggle
-- **Footer** — site links and branding
+- **Footer** — site links and branding, including Contact / Terms / Privacy
 
 ### Auth & API
 
@@ -154,6 +165,7 @@ public/                            # Static assets (logos, favicon)
 - **authInterceptor** — attaches `Authorization: Bearer` to API requests; on `401` logs out and redirects to `/my-profile` with a `returnUrl`
 - **BookingsService** — load, create, and cancel user bookings
 - **FavoritesService** — load, toggle, and check liked photographers, synced per-user via the backend API
+- **ContactService** — posts the contact form to `POST /contact`, which emails the message via the backend's SMTP setup
 - **ToastService** — global success / error notifications (host mounted in MainLayout)
 - API base URL is set in [`src/environment.ts`](src/environment.ts)
 
