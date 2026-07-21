@@ -4,7 +4,7 @@ from pathlib import Path
 from app.config import get_settings
 from app.database import Base, engine
 from app.rate_limit import limiter
-from app.routers import auth, bookings, categories, favorites, photographers, users
+from app.routers import auth, bookings, categories, contact, favorites, photographers, users
 from app.seed import seed_database
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -55,6 +55,7 @@ app.include_router(categories.router)
 app.include_router(photographers.router)
 app.include_router(bookings.router)
 app.include_router(favorites.router)
+app.include_router(contact.router)
 
 app.mount("/uploads", StaticFiles(directory=str(UPLOADS_DIR)), name="uploads")
 

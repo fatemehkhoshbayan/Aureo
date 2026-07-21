@@ -1,25 +1,33 @@
 <div class="flex flex-col gap-8 sm:py-8 w-full min-w-0">
   <h2 class="text-xl font-black text-foreground">Browse by Service</h2>
-  <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3 mb-10 w-full">
-    @for (cat of categories(); track cat.id) {
-      <button
-        type="button"
-        (click)="categoryChanged.emit(cat.label)"
-        class="w-full min-w-0 rounded-2xl overflow-hidden relative h-15 lg:h-28 group transition-all hover:-translate-y-1 shadow-lg"
-        [class.ring-3]="categoryFilter() === cat.label"
-        [class.ring-primary]="categoryFilter() === cat.label"
-      >
-        <img
-          [src]="'https://images.unsplash.com/' + cat.image + '?w=200&h=200&fit=crop&auto=format'"
-          [alt]="cat.label"
-          class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-        />
-        <div class="absolute inset-0 bg-linear-to-t from-black/70 to-transparent"></div>
-        <div class="absolute bottom-0 left-0 right-0 p-2 text-white min-w-0">
-          <p class="text-xs font-bold leading-tight truncate">{{ cat.label }}</p>
-          <p class="text-xs opacity-80 truncate">from {{ cat.from }}</p>
-        </div>
-      </button>
-    }
-  </div>
+  @if (loading()) {
+    <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3 mb-10 w-full">
+      @for (i of skeletonTiles; track i) {
+        <div class="w-full h-15 lg:h-28 rounded-2xl bg-muted animate-pulse"></div>
+      }
+    </div>
+  } @else {
+    <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3 mb-10 w-full">
+      @for (cat of categories(); track cat.id) {
+        <button
+          type="button"
+          (click)="categoryChanged.emit(cat.label)"
+          class="w-full min-w-0 rounded-2xl overflow-hidden relative h-15 lg:h-28 group transition-all hover:-translate-y-1 shadow-lg"
+          [class.ring-3]="categoryFilter() === cat.label"
+          [class.ring-primary]="categoryFilter() === cat.label"
+        >
+          <img
+            [src]="'https://images.unsplash.com/' + cat.image + '?w=200&h=200&fit=crop&auto=format'"
+            [alt]="cat.label"
+            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+          />
+          <div class="absolute inset-0 bg-linear-to-t from-black/70 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-2 text-white min-w-0">
+            <p class="text-xs font-bold leading-tight truncate">{{ cat.label }}</p>
+            <p class="text-xs opacity-80 truncate">from {{ cat.from }}</p>
+          </div>
+        </button>
+      }
+    </div>
+  }
 </div>

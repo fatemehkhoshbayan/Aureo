@@ -1,12 +1,15 @@
 import {
   BecomePhotographer,
   BookingForm,
+  Contact,
   MyBookings,
   MyProfile,
   NotFound,
   PhotographerDashboard,
   PhotographerInfo,
+  Privacy,
   ServicesList,
+  Terms,
 } from '@/features';
 import { MainLayout } from '@/layout';
 import { authGuard, roleGuard } from '@/services';
@@ -48,6 +51,18 @@ export const routes: Routes = [
       {
         path: 'become-a-photographer',
         component: BecomePhotographer,
+      },
+      {
+        path: 'contact',
+        component: Contact,
+      },
+      {
+        path: 'terms',
+        component: Terms,
+      },
+      {
+        path: 'privacy',
+        component: Privacy,
       },
       {
         path: '**',

@@ -50,6 +50,19 @@ def send_email(to: str, subject: str, body: str) -> None:
         logger.exception("Failed to send email to %s (%s)", to, subject)
 
 
+def send_contact_message_email(
+    *,
+    to: str,
+    full_name: str,
+    reply_to: str | None,
+    message: str,
+) -> None:
+    reply_line = f"\nReply-to: {reply_to}" if reply_to else ""
+    subject = f"Aureo contact form — {full_name}"
+    body = f"New message from the Aureo contact form.\n\nName: {full_name}{reply_line}\n\n{message}\n"
+    send_email(to, subject, body)
+
+
 def send_booking_confirmed_email(
     *,
     to: str,

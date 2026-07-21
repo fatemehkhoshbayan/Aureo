@@ -2,13 +2,19 @@
   <div class="flex flex-col gap-2">
     <p class="text-md font-bold uppercase tracking-widest text-muted-foreground">Photographers</p>
     <div class="flex flex-col gap-2">
-      @for (photographer of filters.photographers(); track photographer) {
-        <app-pill
-          [label]="photographer"
-          [value]="photographer"
-          [current]="filters.photographerFilter()"
-          (changed)="filters.setPhotographerFilter($event)"
-        />
+      @if (photographersLoading()) {
+        @for (i of skeletonPills; track i) {
+          <div class="h-9 w-full rounded-xl bg-muted animate-pulse"></div>
+        }
+      } @else {
+        @for (photographer of filters.photographers(); track photographer) {
+          <app-pill
+            [label]="photographer"
+            [value]="photographer"
+            [current]="filters.photographerFilter()"
+            (changed)="filters.setPhotographerFilter($event)"
+          />
+        }
       }
     </div>
   </div>
