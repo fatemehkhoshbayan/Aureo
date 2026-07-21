@@ -19,4 +19,4 @@ services:
         value: "false"
       - key: CORS_ORIGINS
         sync: false
-        value: http://localhost:4200,https://aureo-pi.vercel.app/
+        value: http://localhost:4200,https://aureo-pi.vercel.app

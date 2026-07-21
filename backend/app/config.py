@@ -46,7 +46,9 @@ class Settings(BaseSettings):
 
     @property
     def cors_origin_list(self) -> list[str]:
-        return [o.strip() for o in self.cors_origins.split(",") if o.strip()]
+        # CORSMiddleware does an exact match against the browser's Origin header,
+        # which never has a trailing slash — strip one if pasted in by mistake.
+        return [o.strip().rstrip("/") for o in self.cors_origins.split(",") if o.strip()]
 
 
 @lru_cache
