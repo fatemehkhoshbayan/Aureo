@@ -214,6 +214,14 @@ class PackageUpdate(BaseModel):
     includes: list[str] | None = None
 
 
+# --- Contact ---
+
+class ContactMessageCreate(BaseModel):
+    fullName: str = Field(min_length=1)
+    email: EmailStr | None = None
+    message: str = Field(min_length=1)
+
+
 # --- Bookings ---
 
 BookingStatus = Literal["completed", "upcoming", "cancelled"]
