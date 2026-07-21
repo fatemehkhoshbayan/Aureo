@@ -1,0 +1,70 @@
+<section class="max-w-5xl mx-auto gap-10 flex flex-col px-4 sm:px-6 lg:px-8 py-15">
+  <div class="flex items-center gap-2">
+    <span class="icon-[lucide--mail] text-accent text-3xl"></span>
+    <h1 class="text-3xl font-black text-foreground font-display">Contact Us</h1>
+  </div>
+
+  <div class="w-full max-w-4xl m-auto bg-card rounded-3xl shadow-md p-8 flex flex-col gap-6">
+    <div class="flex flex-col items-center gap-4 text-center">
+      <div class="w-16 h-16 rounded-2xl flex items-center justify-center bg-secondary/70">
+        <span class="icon-[lucide--messages-square] text-2xl text-secondary-dark"></span>
+      </div>
+      <h2 class="text-xl font-bold text-foreground">We'd love to hear from you</h2>
+      <p class="text-md max-w-2xl text-muted-foreground">
+        Have a question about booking a photographer, listing your services, or anything else? Fill
+        out the form below and we'll get back to you as soon as we can.
+      </p>
+      <p class="text-md text-muted-foreground">
+        Or email us directly at
+        <a [href]="'mailto:' + contactEmail" class="font-semibold text-primary hover:underline">
+          {{ contactEmail }}
+        </a>
+      </p>
+    </div>
+
+    <form
+      class="flex flex-col gap-5 py-5 px-4 sm:px-10"
+      (ngSubmit)="onSend()"
+      [formGroup]="contactForm"
+    >
+      <label class="flex flex-col gap-1.5 text-sm">
+        <span class="font-semibold text-foreground">Your name</span>
+        <input
+          type="text"
+          formControlName="fullName"
+          autocomplete="name"
+          class="w-full rounded-xl border border-border bg-input-background px-4 py-3 text-foreground outline-none focus:ring-2 focus:ring-primary/40"
+          placeholder="Jane Doe"
+        />
+        @if (contactForm.controls.fullName.touched && contactForm.controls.fullName.invalid) {
+          <span class="text-xs text-destructive">Name is required</span>
+        }
+      </label>
+
+      <label class="flex flex-col gap-1.5 text-sm">
+        <span class="font-semibold text-foreground">Message</span>
+        <textarea
+          formControlName="message"
+          rows="5"
+          class="w-full rounded-xl border border-border bg-input-background px-4 py-3 text-foreground outline-none focus:ring-2 focus:ring-primary/40 resize-y min-h-32"
+          placeholder="How can we help you?"
+        ></textarea>
+        @if (contactForm.controls.message.touched && contactForm.controls.message.invalid) {
+          <span class="text-xs text-destructive">Message is required</span>
+        }
+      </label>
+
+      @if (sendError()) {
+        <p class="text-sm text-destructive">{{ sendError() }}</p>
+      }
+
+      <button
+        type="submit"
+        [disabled]="submitting()"
+        class="w-full py-3 rounded-xl font-bold text-white mt-5 bg-linear-to-br from-primary to-chart-3 hover:opacity-90 transition-opacity disabled:opacity-60"
+      >
+        {{ submitting() ? 'Sending…' : 'Send message' }}
+      </button>
+    </form>
+  </div>
+</section>

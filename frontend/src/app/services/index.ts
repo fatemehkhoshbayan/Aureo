@@ -13,6 +13,9 @@ export { PhotographersService } from './photographers/photographers.services';
 export { type Category } from './categories/categories.interfaces';
 export { CategoriesService } from './categories/categories.services';
 
+export { type ContactMessage } from './contact/contact.interfaces';
+export { ContactService } from './contact/contact.service';
+
 export {
   type ApiBooking,
   type Booking,
