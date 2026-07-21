@@ -1,4 +1,4 @@
-import { AuthService } from '@/services';
+import { AuthService, ToastService } from '@/services';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { switchMap } from 'rxjs';
@@ -12,6 +12,7 @@ import { ProfileEditForm } from '../edit-form/edit-form';
 })
 export class ProfileUserInfo {
   private readonly auth = inject(AuthService);
+  private readonly toast = inject(ToastService);
 
   protected readonly editing = signal(false);
   protected readonly saving = signal(false);
@@ -89,6 +90,7 @@ export class ProfileUserInfo {
         });
         this.saving.set(false);
         this.editing.set(false);
+        this.toast.add({ type: 'success', message: 'Profile updated successfully.' });
       },
       error: (error: HttpErrorResponse) => {
         this.saving.set(false);

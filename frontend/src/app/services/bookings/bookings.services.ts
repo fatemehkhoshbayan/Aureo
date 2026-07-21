@@ -5,6 +5,7 @@ import { environment } from '../../../environment';
 import { AuthService } from '../auth/auth.service';
 import { Photographer } from '../photographers/photographers.interfaces';
 import { PhotographersService } from '../photographers/photographers.services';
+import { ToastService } from '../toast/toast.service';
 import { ApiBooking, Booking, BookingCreate } from './bookings.interfaces';
 
 @Injectable({ providedIn: 'root' })
@@ -12,6 +13,7 @@ export class BookingsService {
   private readonly http = inject(HttpClient);
   private readonly auth = inject(AuthService);
   private readonly photographers = inject(PhotographersService);
+  private readonly toast = inject(ToastService);
 
   private readonly _apiBookings = signal<ApiBooking[]>([]);
 
@@ -43,6 +45,7 @@ export class BookingsService {
         console.error('Failed to load bookings', err);
         this.error.set('Failed to load bookings');
         this.loading.set(false);
+        this.toast.add({ type: 'error', message: 'Could not load your bookings.' });
       },
     });
   }
@@ -59,10 +62,12 @@ export class BookingsService {
     this.http.patch<ApiBooking>(`${environment.apiBase}/bookings/${id}/cancel`, {}).subscribe({
       next: (updated) => {
         this._apiBookings.update((list) => list.map((b) => (b.id === updated.id ? updated : b)));
+        this.toast.add({ type: 'success', message: 'Booking cancelled successfully.' });
       },
       error: (err) => {
         console.error('Failed to cancel booking', err);
         this.error.set('Failed to cancel booking');
+        this.toast.add({ type: 'error', message: 'Could not cancel booking. Please try again.' });
       },
     });
   }

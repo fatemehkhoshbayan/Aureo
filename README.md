@@ -21,7 +21,7 @@ API docs: [http://localhost:8000/docs](http://localhost:8000/docs)
 
 Health check: `GET http://localhost:8000/health`
 
-On startup the backend seeds data when `SEED_ON_STARTUP=true`. In Docker, tables are applied with Alembic (`alembic upgrade head` runs before Uvicorn). Locally without Docker, `AUTO_CREATE_TABLES=true` (default) still creates tables on startup for convenience.
+On startup the backend seeds data when `SEED_ON_STARTUP=true`. Alembic is the sole source of schema truth: in Docker, `alembic upgrade head` runs before Uvicorn starts. `AUTO_CREATE_TABLES` defaults to `false` everywhere; set it to `true` in your local `.env` if you want to run the API bare (no Docker, no manual `alembic upgrade head`) and have tables created automatically via SQLAlchemy on startup instead.
 
 ### Local run (without Docker for the API)
 
@@ -42,7 +42,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-3. Apply migrations (or rely on `AUTO_CREATE_TABLES=true`), seed, then run:
+3. Apply migrations (required now that `AUTO_CREATE_TABLES` defaults to `false`; set `AUTO_CREATE_TABLES=true` in `.env` instead if you'd rather skip this step), seed, then run:
 
 ```bash
 alembic upgrade head
@@ -50,11 +50,20 @@ python -m app.seed
 uvicorn main:app --reload --port 8000
 ```
 
-Alembic is the source of truth for schema changes:
+#### Writing migrations
 
-```bash
-alembic upgrade head
+Every migration's `upgrade()` must guard each `create_table`/`add_column`/`create_index` with the helpers in [`app/migration_utils.py`](backend/app/migration_utils.py) (`has_table`, `has_column`, `has_index`) before creating the object, e.g.:
+
+```python
+def upgrade() -> None:
+    bind = op.get_bind()
+    if not has_table(bind, "bookings"):
+        op.create_table("bookings", ...)
+    if not has_column(bind, "bookings", "contact_email"):
+        op.add_column("bookings", sa.Column("contact_email", ...))
 ```
+
+This keeps `alembic upgrade head` safe to re-run against any database state — empty, partially migrated, or one where a table/column was created some other way — so a schema drift never turns into a `DuplicateTable`/`DuplicateColumn` deploy failure again. Verify a new migration by running `alembic upgrade head` twice in a row; the second run should be a no-op.
 
 ### Endpoints
 

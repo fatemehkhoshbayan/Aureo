@@ -57,7 +57,7 @@ src/app/
 │   ├── categories/                # CategoriesService
 │   ├── auth/                      # AuthService, interceptor, user types
 │   ├── bookings/                  # BookingsService + Booking types (load / create / cancel)
-│   ├── favorites/                 # Local favorites (liked photographers)
+│   ├── favorites/                 # Favorites (liked photographers), synced per-user via the backend API
 │   ├── theme/                     # Dark / light theme persistence
 │   └── toast/                     # ToastService (success / error notifications)
 ├── layout/
@@ -136,7 +136,7 @@ public/                            # Static assets (logos, favicon)
 
 ### My profile (`/my-profile`)
 
-- **Login** — email / password form against the auth API
+- **Login / sign up** — email / password login, or switch to a sign-up form to create a new account, against the auth API
 - **User info** — name, email, phone, location, and avatar
 - **Edit profile** — update details and upload avatar
 - **Preferences** — dark / light theme and email notification toggle
@@ -150,9 +150,10 @@ public/                            # Static assets (logos, favicon)
 
 ### Auth & API
 
-- **AuthService** — login, logout, `loadMe`, token persistence
-- **authInterceptor** — attaches `Authorization: Bearer` to API requests
+- **AuthService** — login, register, logout, `loadMe`, token persistence
+- **authInterceptor** — attaches `Authorization: Bearer` to API requests; on `401` logs out and redirects to `/my-profile` with a `returnUrl`
 - **BookingsService** — load, create, and cancel user bookings
+- **FavoritesService** — load, toggle, and check liked photographers, synced per-user via the backend API
 - **ToastService** — global success / error notifications (host mounted in MainLayout)
 - API base URL is set in [`src/environment.ts`](src/environment.ts)
 

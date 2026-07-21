@@ -1,4 +1,4 @@
-import { AuthService, ThemeService } from '@/services';
+import { AuthService, ThemeService, ToastService } from '@/services';
 import { Component, effect, inject, signal } from '@angular/core';
 
 @Component({
@@ -9,6 +9,7 @@ import { Component, effect, inject, signal } from '@angular/core';
 export class ProfilePreferences {
   private readonly auth = inject(AuthService);
   private readonly theme = inject(ThemeService);
+  private readonly toast = inject(ToastService);
 
   protected readonly darkMode = this.theme.darkMode;
   protected readonly emailNotifications = signal(true);
@@ -41,6 +42,10 @@ export class ProfilePreferences {
       error: () => {
         this.emailNotifications.set(!next);
         this.savingNotifications.set(false);
+        this.toast.add({
+          type: 'error',
+          message: 'Could not update email notification preference.',
+        });
       },
     });
   }

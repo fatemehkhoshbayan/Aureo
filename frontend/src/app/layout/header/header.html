@@ -52,7 +52,7 @@
   <!-- Mobile menu panel -->
   @if (mobileMenuOpen()) {
     <div
-      class="lg:hidden z-[var(--z-header-menu)] border-t border-border bg-card px-4 py-3 space-y-1 absolute top-full left-0 right-0 w-full shadow-md"
+      class="lg:hidden z-(--z-header-menu) border-t border-border bg-card px-4 py-3 space-y-1 absolute top-full left-0 right-0 w-full shadow-md"
     >
       @for (link of navLinks(); track link.id) {
         <a
